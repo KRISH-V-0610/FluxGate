@@ -1,6 +1,6 @@
 import type { Redis } from 'ioredis';
-import { TokenBucketLimiter, type AnyRateLimiter, type TokenBucketConfig } from '@fluxgate/core';
-import { LeasedTokenBucket, NaiveRedisTokenBucket, RedisTokenBucket } from '@fluxgate/redis';
+import { TokenBucketLimiter, type AnyRateLimiter, type TokenBucketConfig } from '@flux-gate/core';
+import { LeasedTokenBucket, NaiveRedisTokenBucket, RedisTokenBucket } from '@flux-gate/redis';
 
 /**
  * Where the limiter state lives. The same app runs in four modes, which is

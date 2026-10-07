@@ -1,5 +1,5 @@
 import type { Redis } from 'ioredis';
-import { resolveCost, type AsyncRateLimiter, type ConsumeOptions, type RateLimitResult } from '@fluxgate/core';
+import { resolveCost, type AsyncRateLimiter, type ConsumeOptions, type RateLimitResult } from '@flux-gate/core';
 import type { RedisLimiterConfig } from './naive-token-bucket.js';
 import { denial, takeTokens } from './token-bucket-script.js';
 

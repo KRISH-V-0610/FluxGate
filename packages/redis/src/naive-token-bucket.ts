@@ -1,6 +1,6 @@
 import type { Redis } from 'ioredis';
-import { resolveCost, tokenBucketStep } from '@fluxgate/core';
-import type { AsyncRateLimiter, ConsumeOptions, RateLimitResult, TokenBucketConfig, TokenBucketState } from '@fluxgate/core';
+import { resolveCost, tokenBucketStep } from '@flux-gate/core';
+import type { AsyncRateLimiter, ConsumeOptions, RateLimitResult, TokenBucketConfig, TokenBucketState } from '@flux-gate/core';
 
 export interface RedisLimiterConfig extends TokenBucketConfig {
   /** Namespace for this limiter's keys, so tiers/limiters never share a bucket. */

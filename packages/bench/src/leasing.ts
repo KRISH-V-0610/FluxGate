@@ -18,8 +18,8 @@
  */
 import { randomUUID } from 'node:crypto';
 import type { Redis } from 'ioredis';
-import type { AsyncRateLimiter } from '@fluxgate/core';
-import { connectRedis, LeasedTokenBucket, RedisTokenBucket } from '@fluxgate/redis';
+import type { AsyncRateLimiter } from '@flux-gate/core';
+import { connectRedis, LeasedTokenBucket, RedisTokenBucket } from '@flux-gate/redis';
 import { latencySummary, maxInAnyWindow, mulberry32, openLoop, sleep, writeResult } from './common.js';
 
 const INSTANCES = 3;

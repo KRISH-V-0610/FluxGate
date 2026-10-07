@@ -1,4 +1,4 @@
-import type { AnyRateLimiter } from '@fluxgate/core';
+import type { AnyRateLimiter } from '@flux-gate/core';
 
 export interface TierOptions<Context = unknown> {
   /** Tier name → the limiter for that tier (each with its own key prefix). */

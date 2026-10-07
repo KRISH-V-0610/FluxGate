@@ -1,4 +1,4 @@
-# @fluxgate/http
+# @flux-gate/http
 
 Rate limiting for any Node web framework. One decision function, `createCheck()`, with adapters for **Express, Fastify, Hono and the Fetch API** (Next.js, Bun, Deno, Cloudflare Workers). You get:
 
@@ -9,19 +9,19 @@ Rate limiting for any Node web framework. One decision function, `createCheck()`
 - Prometheus metrics.
 
 ```bash
-npm i @fluxgate/http @fluxgate/core     # or @fluxgate/redis for a limit shared across instances
+npm i @flux-gate/http @flux-gate/core     # or @flux-gate/redis for a limit shared across instances
 ```
 
 ```ts
-import { TokenBucketLimiter } from '@fluxgate/core';
-import { fluxgate } from '@fluxgate/http/express';     // or /fastify, /hono, /fetch
+import { TokenBucketLimiter } from '@flux-gate/core';
+import { fluxgate } from '@flux-gate/http/express';     // or /fastify, /hono, /fetch
 
 app.use('/api', fluxgate({ limiter: new TokenBucketLimiter({ capacity: 20, refillPerSecond: 2 }) }));
 ```
 
 ```ts
 // Next.js route handler, charging by tokens instead of requests
-import { withRateLimit } from '@fluxgate/http/fetch';
+import { withRateLimit } from '@flux-gate/http/fetch';
 
 export const POST = withRateLimit(
   { limiter, key: (req) => req.headers.get('x-api-key') ?? 'anonymous', cost: async (req) => (await req.clone().json()).max_tokens },

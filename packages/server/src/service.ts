@@ -1,7 +1,7 @@
 import { createHash, timingSafeEqual } from 'node:crypto';
 import express, { type ErrorRequestHandler, type RequestHandler, type Router } from 'express';
-import type { AnyRateLimiter } from '@fluxgate/core';
-import { createCheck, type Check, type Metrics } from '@fluxgate/http';
+import type { AnyRateLimiter } from '@flux-gate/core';
+import { createCheck, type Check, type Metrics } from '@flux-gate/http';
 
 export interface ServiceOptions {
   /** Policy name → its limiter. Callers pick one by name. */
@@ -28,7 +28,7 @@ const MAX_KEY_LENGTH = 256;
  *   400  the request is wrong (unknown policy, bad key or cost)
  *   401  missing or wrong token
  *   503  the store is down. The service never guesses: the caller's own
- *        fail mode (in @fluxgate/client + an adapter) decides what to do.
+ *        fail mode (in @flux-gate/client + an adapter) decides what to do.
  */
 export function createServiceRouter(options: ServiceOptions): Router {
   const checks = new Map<string, Check>();

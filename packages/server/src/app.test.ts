@@ -2,10 +2,10 @@ import type { AddressInfo } from 'node:net';
 import type { Server } from 'node:http';
 import express from 'express';
 import { afterEach, describe, expect, it } from 'vitest';
-import { TokenBucketLimiter, type AsyncRateLimiter } from '@fluxgate/core';
-import { byTier, Metrics } from '@fluxgate/http';
-import { fluxgate } from '@fluxgate/http/express';
-import { FluxgateClient } from '@fluxgate/client';
+import { TokenBucketLimiter, type AsyncRateLimiter } from '@flux-gate/core';
+import { byTier, Metrics } from '@flux-gate/http';
+import { fluxgate } from '@flux-gate/http/express';
+import { FluxgateClient } from '@flux-gate/client';
 import { createApp, type AppOptions } from './app.js';
 import { parsePolicies } from './policies.js';
 import { demoTierOf } from './tiers.js';
@@ -201,7 +201,7 @@ describe('rate-limit service: POST /v1/check', () => {
   });
 });
 
-describe('end to end: an app limited through the service with @fluxgate/client', () => {
+describe('end to end: an app limited through the service with @flux-gate/client', () => {
   async function appUsing(serviceUrl: string, failMode: 'open' | 'closed' = 'open') {
     const client = new FluxgateClient({ url: serviceUrl, token: 't0ken' });
     const app = express();

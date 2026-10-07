@@ -1,5 +1,5 @@
 // Framework-agnostic parts. Each framework adapter has its own entry point
-// (@fluxgate/http/express, /fastify, /hono, /fetch), so installing this
+// (@flux-gate/http/express, /fastify, /hono, /fetch), so installing this
 // package never pulls in a framework you don't use.
 export { createCheck } from './check.js';
 export type { Check, CheckOptions, CheckRequest, Decision, FailMode, Outcome, Rejection } from './check.js';

@@ -1,4 +1,4 @@
-import type { TokenBucketConfig } from '@fluxgate/core';
+import type { TokenBucketConfig } from '@flux-gate/core';
 
 /**
  * Named limits that callers pick by name, e.g. "free" = burst 20, 2 per

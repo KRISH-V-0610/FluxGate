@@ -1,11 +1,11 @@
-# @fluxgate/server
+# @flux-gate/server
 
 FluxGate as a deployable service: `POST /v1/check` with named policies, `GET /metrics` for Prometheus, and `GET /health`. Configure it with environment variables and call it from any language.
 
 ```bash
 STORE=redis-leased REDIS_URL=redis://localhost:6379 SERVICE_TOKEN=s3cret \
 POLICIES='{"free":{"capacity":20,"refillPerSecond":2},"login":{"capacity":5,"refillPerSecond":0.1}}' \
-npx @fluxgate/server
+npx @flux-gate/server
 ```
 
 ```bash
@@ -28,4 +28,4 @@ curl -s localhost:3000/v1/check -H 'authorization: Bearer s3cret' \
 
 A denied request is still `200`, with the decision in the body. `400` means bad input or an unknown policy, `401` a wrong token, and `503` that the store is unavailable.
 
-Call it with [`@fluxgate/client`](https://www.npmjs.com/package/@fluxgate/client) or plain HTTP. Part of [FluxGate](https://github.com/KRISH-V-0610/FluxGate#readme), with Docker Compose, Grafana dashboards and measured results. MIT.
+Call it with [`@flux-gate/client`](https://www.npmjs.com/package/@flux-gate/client) or plain HTTP. Part of [FluxGate](https://github.com/KRISH-V-0610/FluxGate#readme), with Docker Compose, Grafana dashboards and measured results. MIT.

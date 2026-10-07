@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { TokenBucketLimiter, type AsyncRateLimiter, type RateLimitResult } from '@fluxgate/core';
+import { TokenBucketLimiter, type AsyncRateLimiter, type RateLimitResult } from '@flux-gate/core';
 import { createCheck } from './check.js';
 import { Metrics } from './metrics.js';
 

@@ -111,7 +111,7 @@ const sections: Record<string, () => string | undefined> = {
         r.rows.map((x: Json) => [x.mode, x.store, x.inFlight, x.p50, x.p99, x.throughputPerSec.toLocaleString('en-US'), x.redisCallsPerRequest]),
       ),
       '',
-      `<sub>${r.setup.note}. "service" = \`@fluxgate/client\` → HTTP → the FluxGate server as a separate process (lease size ${r.setup.leaseSize} for redis-leased). One hot key, nothing denied. Source: \`results/service.json\`.</sub>`,
+      `<sub>${r.setup.note}. "service" = \`@flux-gate/client\` → HTTP → the FluxGate server as a separate process (lease size ${r.setup.leaseSize} for redis-leased). One hot key, nothing denied. Source: \`results/service.json\`.</sub>`,
     ].join('\n');
   },
 

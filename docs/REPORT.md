@@ -24,13 +24,13 @@ Rate limiters are usually described by their algorithm, but in a horizontally sc
 
 ## 2. System under test
 
-- **Algorithms (`@fluxgate/core`).** Fixed window, sliding window log (exact reference), sliding window counter (Cloudflare's weighted estimate), token bucket (continuous refill), and GCRA. All are synchronous and take an explicit `now`, so experiments are deterministic.
-- **Stores (`@fluxgate/redis`).** All three implement a token bucket:
+- **Algorithms (`@flux-gate/core`).** Fixed window, sliding window log (exact reference), sliding window counter (Cloudflare's weighted estimate), token bucket (continuous refill), and GCRA. All are synchronous and take an explicit `now`, so experiments are deterministic.
+- **Stores (`@flux-gate/redis`).** All three implement a token bucket:
   - **naive**: `HMGET` → `tokenBucketStep()` in JS → `MULTI HSET PEXPIRE`. It uses the *same* pure function as the in-memory bucket, so the only variable is atomicity.
   - **atomic**: the same arithmetic in one Lua script (`EVALSHA`), using Redis `TIME` as the clock.
   - **leased**: takes up to *N* tokens per script call and serves later requests from local memory until the lease runs out or its TTL expires. Concurrent misses share one in-flight call, and a denial is cached until its `retry-after`.
-- **HTTP layer (`@fluxgate/http`).** One decision function, `check()`, with tiers, standard headers, a limiter timeout, fail-open / fail-closed and Prometheus metrics, wrapped by adapters for Express, Fastify, Hono and the Fetch API.
-- **Service (`@fluxgate/server`, `@fluxgate/client`).** `POST /v1/check` with named policies, so apps that can't or shouldn't talk to Redis get the same limits over HTTP.
+- **HTTP layer (`@flux-gate/http`).** One decision function, `check()`, with tiers, standard headers, a limiter timeout, fail-open / fail-closed and Prometheus metrics, wrapped by adapters for Express, Fastify, Hono and the Fetch API.
+- **Service (`@flux-gate/server`, `@flux-gate/client`).** `POST /v1/check` with named policies, so apps that can't or shouldn't talk to Redis get the same limits over HTTP.
 
 ## 3. Setup
 
@@ -241,7 +241,7 @@ xychart-beta
   - **in-process `consume()`**, the bare limiter;
   - **in-process `check()` + metrics**, what every framework adapter pays;
   - **HTTP hop only**, `fetch` to a bare `node:http` server that returns a fixed answer: the floor for *any* HTTP service on this machine;
-  - **service**, `@fluxgate/client` → the real FluxGate server, started as a separate process the way it's deployed.
+  - **service**, `@flux-gate/client` → the real FluxGate server, started as a separate process the way it's deployed.
 - Redis calls per decision for the service are read from its own `/metrics` endpoint. Only Redis was running in Docker during the measurement.
 
 <!-- results:service:start -->
@@ -264,7 +264,7 @@ xychart-beta
 | service (HTTP) | redis-leased | 1 | 1.117 | 5.337 | 690 | 0.05 |
 | service (HTTP) | redis-leased | 64 | 46.404 | 90.56 | 1,276 | 0.05 |
 
-<sub>latency per decision in ms; client, service and Redis 7.4 (Docker Desktop) on one Windows 11 machine, Node v22.17.0. "service" = `@fluxgate/client` → HTTP → the FluxGate server as a separate process (lease size 20 for redis-leased). One hot key, nothing denied. Source: `results/service.json`.</sub>
+<sub>latency per decision in ms; client, service and Redis 7.4 (Docker Desktop) on one Windows 11 machine, Node v22.17.0. "service" = `@flux-gate/client` → HTTP → the FluxGate server as a separate process (lease size 20 for redis-leased). One hot key, nothing denied. Source: `results/service.json`.</sub>
 <!-- results:service:end -->
 
 **Discussion.**

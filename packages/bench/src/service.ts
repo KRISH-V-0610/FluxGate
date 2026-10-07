@@ -2,11 +2,11 @@
  * Experiment 6: what does each layer of the toolkit cost per decision?
  *
  *  - in-process consume()   the bare limiter (the baseline)
- *  - in-process check()     + the @fluxgate/http layer: timeout race, headers,
+ *  - in-process check()     + the @flux-gate/http layer: timeout race, headers,
  *                           Prometheus metrics. What every adapter pays.
  *  - HTTP hop only          fetch → a bare node:http server, no limiter: the
  *                           floor that any service on this machine pays.
- *  - service                @fluxgate/client → HTTP → the FluxGate server (a
+ *  - service                @flux-gate/client → HTTP → the FluxGate server (a
  *                           separate process, as deployed) → its store. What
  *                           an app pays for not talking to Redis itself.
  *
@@ -19,10 +19,10 @@
 import { spawn, type ChildProcess } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
 import { createServer } from 'node:net';
-import { TokenBucketLimiter, type AnyRateLimiter } from '@fluxgate/core';
-import { createCheck, Metrics } from '@fluxgate/http';
-import { FluxgateClient } from '@fluxgate/client';
-import { connectRedis, RedisTokenBucket } from '@fluxgate/redis';
+import { TokenBucketLimiter, type AnyRateLimiter } from '@flux-gate/core';
+import { createCheck, Metrics } from '@flux-gate/http';
+import { FluxgateClient } from '@flux-gate/client';
+import { connectRedis, RedisTokenBucket } from '@flux-gate/redis';
 import { latencySummary, ROOT, sleep, writeResult } from './common.js';
 
 const REQUESTS = { 1: 3000, 64: 20000 } as const;

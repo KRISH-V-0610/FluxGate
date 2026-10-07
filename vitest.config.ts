@@ -7,9 +7,9 @@ export default defineConfig({
   resolve: {
     // Tests run against the TypeScript sources, so `npm test` works without a build.
     alias: [
-      // Subpath entry points: @fluxgate/http/express → packages/http/src/express.ts
+      // Subpath entry points: @flux-gate/http/express → packages/http/src/express.ts
       { find: /^@fluxgate\/http\/(.+)$/, replacement: `${packages}http/src/$1.ts` },
-      // Package roots: @fluxgate/core → packages/core/src/index.ts
+      // Package roots: @flux-gate/core → packages/core/src/index.ts
       { find: /^@fluxgate\/(core|redis|http|client|server)$/, replacement: `${packages}$1/src/index.ts` },
     ],
   },

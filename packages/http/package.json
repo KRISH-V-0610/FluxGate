@@ -1,7 +1,7 @@
 {
-  "name": "@fluxgate/http",
+  "name": "@flux-gate/http",
   "version": "1.0.0",
-  "description": "Rate limiting for any HTTP stack: a framework-agnostic check(), adapters for Express, Fastify, Hono and the Fetch API (Next.js, Bun, Deno, Cloudflare Workers), and Prometheus metrics. No runtime dependencies besides @fluxgate/core.",
+  "description": "Rate limiting for any HTTP stack: a framework-agnostic check(), adapters for Express, Fastify, Hono and the Fetch API (Next.js, Bun, Deno, Cloudflare Workers), and Prometheus metrics. No runtime dependencies besides @flux-gate/core.",
   "keywords": [
     "rate-limiter",
     "rate-limiting",
@@ -56,7 +56,7 @@
     "prepublishOnly": "tsc -b"
   },
   "dependencies": {
-    "@fluxgate/core": "1.0.0"
+    "@flux-gate/core": "1.0.0"
   },
   "peerDependencies": {
     "express": ">=4",

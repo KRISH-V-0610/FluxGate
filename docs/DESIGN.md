@@ -220,7 +220,7 @@ Two rules worth noticing:
 
 ### 4.2 The adapters (`express.ts`, `fastify.ts`, `hono.ts`, `fetch.ts`)
 
-Each adapter reads the key and cost from the request, calls `check`, sets the headers, then either rejects or continues. They're published as subpaths (`@fluxgate/http/express`, `/fastify`, `/hono`, `/fetch`), so importing the Hono adapter never loads Express, and the frameworks are optional peer dependencies.
+Each adapter reads the key and cost from the request, calls `check`, sets the headers, then either rejects or continues. They're published as subpaths (`@flux-gate/http/express`, `/fastify`, `/hono`, `/fetch`), so importing the Hono adapter never loads Express, and the frameworks are optional peer dependencies.
 
 Each framework had one trap:
 - **Express.** The default key is `key:<x-api-key>` if the header is present, else `ip:<client ip>`. The prefixes keep an API key that looks like an IP from colliding with a real IP, and keys are capped at 128 characters, so a client can't make us store megabyte-sized Redis keys. A bug in a key or cost function goes to `next(err)`, Express's error handler, instead of crashing the process.
@@ -280,7 +280,7 @@ Contract choices:
 - **The token is compared in constant time.** A normal string comparison stops at the first differing character, so response timing can leak how much of a guessed token is right. Both values are hashed with SHA-256 (so their lengths are equal) and compared with `crypto.timingSafeEqual`.
 - **Bounded input.** 4 KB bodies, keys of at most 256 characters, costs that are positive integers.
 
-**The client (`@fluxgate/client`).** `new FluxgateClient({ url, token }).policy('free')` returns an object with the same `consume()` as every limiter. So it plugs into every adapter unchanged, and the adapter's timeout and fail-open/closed policy cover the network call too. The client has its own 100 ms default timeout, throws a typed `FluxgateServiceError` for timeouts, network errors, non-2xx answers and malformed bodies, and uses only `fetch`, so it runs in edge runtimes.
+**The client (`@flux-gate/client`).** `new FluxgateClient({ url, token }).policy('free')` returns an object with the same `consume()` as every limiter. So it plugs into every adapter unchanged, and the adapter's timeout and fail-open/closed policy cover the network call too. The client has its own 100 ms default timeout, throws a typed `FluxgateServiceError` for timeouts, network errors, non-2xx answers and malformed bodies, and uses only `fetch`, so it runs in edge runtimes.
 
 **What it costs.** One HTTP hop per decision. `bench/service.ts` measures it against in-process limiting and against a bare `node:http` server that does no work at all, the floor for any HTTP service on the same machine. On this machine (Windows loopback, one client process):
 - **In-process, the HTTP layer is free.** `check()` with its timeout, headers and metrics is indistinguishable from a bare `consume()`: well under a microsecond in memory, and the same ~1 ms as the Redis round trip itself.
@@ -304,7 +304,7 @@ So the trade is explicit: service mode buys language independence and central po
   - With `trust proxy = true`, it would take the left-most, forged one, and an attacker could pick a new IP on every request to dodge the limit.
 - **Configuration via environment variables (12-factor).** `STORE`, `FAIL_MODE`, `POLICIES`, `SERVICE_TOKEN` and others, so Docker Compose can switch the store without code changes. Invalid values fail at startup, not at request time. Without `SERVICE_TOKEN`, the server logs a warning that anyone who can reach it can use `/v1/check`.
 - **One limiter per policy, shared.** The demo API (`/api/*`) and the service (`/v1/check`) use the same policy objects, so a client's budget is the same whichever way it arrives.
-- **`npx @fluxgate/server`.** The package has a `bin`, so the service runs without Docker too.
+- **`npx @flux-gate/server`.** The package has a `bin`, so the service runs without Docker too.
 - **Graceful shutdown.** On `SIGTERM` (sent by Docker on `docker compose down`): stop accepting connections, finish in-flight requests, close Redis, and force-exit after 5 s.
 
 ---
@@ -428,5 +428,5 @@ It's a small, stable text format, and the project's rule is no shortcuts in the 
 **Q: What would you do next?**
 - Redis Cluster support, plus tests for a cluster failover (buckets resetting).
 - The IETF `RateLimit` / `RateLimit-Policy` headers.
-- Client-side batching or local leasing in `@fluxgate/client`, so service mode can skip the hop for hot keys, the same idea as token leasing one level up.
+- Client-side batching or local leasing in `@flux-gate/client`, so service mode can skip the hop for hot keys, the same idea as token leasing one level up.
 - A larger evaluation on Linux, with separate machines for client, app and Redis.

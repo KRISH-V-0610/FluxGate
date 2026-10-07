@@ -11,8 +11,8 @@
  */
 import { randomUUID } from 'node:crypto';
 import type { Redis } from 'ioredis';
-import { connectRedis, NaiveRedisTokenBucket, RedisTokenBucket } from '@fluxgate/redis';
-import type { AsyncRateLimiter } from '@fluxgate/core';
+import { connectRedis, NaiveRedisTokenBucket, RedisTokenBucket } from '@flux-gate/redis';
+import type { AsyncRateLimiter } from '@flux-gate/core';
 import { writeResult } from './common.js';
 
 const CAPACITY = 10;

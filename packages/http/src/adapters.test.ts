@@ -4,7 +4,7 @@ import express from 'express';
 import Fastify from 'fastify';
 import { Hono } from 'hono';
 import { afterEach, describe, expect, it } from 'vitest';
-import { TokenBucketLimiter, type AnyRateLimiter, type AsyncRateLimiter } from '@fluxgate/core';
+import { TokenBucketLimiter, type AnyRateLimiter, type AsyncRateLimiter } from '@flux-gate/core';
 import type { FailMode } from './check.js';
 import { fluxgate as expressMiddleware } from './express.js';
 import { fluxgate as fastifyHook } from './fastify.js';

@@ -9,8 +9,8 @@
  * Requires Redis: docker compose up -d redis
  */
 import { randomUUID } from 'node:crypto';
-import { TokenBucketLimiter, type AnyRateLimiter } from '@fluxgate/core';
-import { connectRedis, LeasedTokenBucket, NaiveRedisTokenBucket, RedisTokenBucket } from '@fluxgate/redis';
+import { TokenBucketLimiter, type AnyRateLimiter } from '@flux-gate/core';
+import { connectRedis, LeasedTokenBucket, NaiveRedisTokenBucket, RedisTokenBucket } from '@flux-gate/redis';
 import { latencySummary, writeResult } from './common.js';
 
 const redis = await connectRedis({ commandTimeoutMs: 5000 });

@@ -17,9 +17,9 @@
  */
 import type { AddressInfo } from 'node:net';
 import { Redis } from 'ioredis';
-import { connectRedis, RedisTokenBucket } from '@fluxgate/redis';
-import type { FailMode } from '@fluxgate/http';
-import { createApp } from '@fluxgate/server';
+import { connectRedis, RedisTokenBucket } from '@flux-gate/redis';
+import type { FailMode } from '@flux-gate/http';
+import { createApp } from '@flux-gate/server';
 import { docker, mulberry32, openLoop, percentile, sleep, writeResult } from './common.js';
 
 const RATE = 200;

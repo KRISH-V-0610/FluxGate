@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import type { Redis } from 'ioredis';
-import { TokenBucketLimiter, type AsyncRateLimiter } from '@fluxgate/core';
+import { TokenBucketLimiter, type AsyncRateLimiter } from '@flux-gate/core';
 import { connectRedis } from './client.js';
 import { LeasedTokenBucket } from './leased-token-bucket.js';
 import { NaiveRedisTokenBucket } from './naive-token-bucket.js';

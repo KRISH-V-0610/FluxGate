@@ -35,7 +35,7 @@ import {
   SlidingWindowLogLimiter,
   TokenBucketLimiter,
   type RateLimiter,
-} from '@fluxgate/core';
+} from '@flux-gate/core';
 import { exponential, maxInAnyWindow, mulberry32, writeResult } from './common.js';
 
 const LIMIT = 100;

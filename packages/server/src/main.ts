@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-import { createRedisClient } from '@fluxgate/redis';
-import { byTier, Metrics, type FailMode } from '@fluxgate/http';
+import { createRedisClient } from '@flux-gate/redis';
+import { byTier, Metrics, type FailMode } from '@flux-gate/http';
 import { createApp } from './app.js';
 import { buildLimiter, isStore, redisCalls, STORES } from './limiters.js';
 import { parsePolicies, type Policies } from './policies.js';

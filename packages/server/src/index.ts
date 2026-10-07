@@ -1,5 +1,5 @@
 // The deployable FluxGate server: the demo API, the rate-limit service
-// (POST /v1/check) and /metrics. The reusable middleware lives in @fluxgate/http.
+// (POST /v1/check) and /metrics. The reusable middleware lives in @flux-gate/http.
 export { createApp } from './app.js';
 export type { AppOptions } from './app.js';
 export { createServiceRouter } from './service.js';

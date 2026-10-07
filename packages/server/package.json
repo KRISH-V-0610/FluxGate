@@ -1,5 +1,5 @@
 {
-  "name": "@fluxgate/server",
+  "name": "@flux-gate/server",
   "version": "1.0.0",
   "description": "The deployable FluxGate server: a demo API, the rate-limit service (POST /v1/check) and Prometheus /metrics, configured from environment variables.",
   "keywords": [
@@ -40,13 +40,13 @@
     "prepublishOnly": "tsc -b"
   },
   "dependencies": {
-    "@fluxgate/core": "1.0.0",
-    "@fluxgate/http": "1.0.0",
-    "@fluxgate/redis": "1.0.0",
+    "@flux-gate/core": "1.0.0",
+    "@flux-gate/http": "1.0.0",
+    "@flux-gate/redis": "1.0.0",
     "express": "^5.2.1"
   },
   "devDependencies": {
-    "@fluxgate/client": "1.0.0",
+    "@flux-gate/client": "1.0.0",
     "@types/express": "^5.0.6"
   },
   "engines": {

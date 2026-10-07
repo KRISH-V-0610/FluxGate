@@ -1,7 +1,7 @@
 {
-  "name": "@fluxgate/client",
+  "name": "@flux-gate/client",
   "version": "1.0.0",
-  "description": "Client for the FluxGate rate-limit service: one HTTP call per decision, from any app or edge runtime. Plugs into every @fluxgate/http adapter. No runtime dependencies besides @fluxgate/core types.",
+  "description": "Client for the FluxGate rate-limit service: one HTTP call per decision, from any app or edge runtime. Plugs into every @flux-gate/http adapter. No runtime dependencies besides @flux-gate/core types.",
   "keywords": [
     "rate-limiter",
     "rate-limiting",
@@ -37,7 +37,7 @@
     "prepublishOnly": "tsc -b"
   },
   "dependencies": {
-    "@fluxgate/core": "1.0.0"
+    "@flux-gate/core": "1.0.0"
   },
   "engines": {
     "node": ">=20"

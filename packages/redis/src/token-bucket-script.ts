@@ -1,5 +1,5 @@
 import type { Redis } from 'ioredis';
-import type { RateLimitResult, TokenBucketConfig } from '@fluxgate/core';
+import type { RateLimitResult, TokenBucketConfig } from '@flux-gate/core';
 import { LuaScript } from './lua-script.js';
 
 const script = LuaScript.fromFile('token-bucket.lua');

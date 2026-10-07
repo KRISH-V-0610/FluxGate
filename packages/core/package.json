@@ -1,5 +1,5 @@
 {
-  "name": "@fluxgate/core",
+  "name": "@flux-gate/core",
   "version": "1.0.0",
   "description": "Five rate-limiting algorithms (fixed window, sliding log, sliding counter, token bucket, GCRA) with zero dependencies and a deterministic clock.",
   "keywords": [

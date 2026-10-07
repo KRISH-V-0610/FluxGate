@@ -29,9 +29,9 @@ Small decisions follow from the same question, "what does the person using this 
 
 | Setup | When to use it | Packages | Measured cost per decision (p50) |
 |---|---|---|---|
-| **In-process** | one server, prototypes, per-instance protection | `@fluxgate/core` + `@fluxgate/http` | 0.001 ms |
-| **Shared Redis** | several instances of a Node app, one global limit | `@fluxgate/redis` + `@fluxgate/http` | ≈ 1 ms (one Redis round trip); ≈ 0.01 ms when a token lease answers |
-| **Service** | many apps, many languages, edge or serverless runtimes | run `@fluxgate/server`, call it with `@fluxgate/client` or plain HTTP | ≈ 1.1 ms (one HTTP hop, leasing inside the service) |
+| **In-process** | one server, prototypes, per-instance protection | `@flux-gate/core` + `@flux-gate/http` | 0.001 ms |
+| **Shared Redis** | several instances of a Node app, one global limit | `@flux-gate/redis` + `@flux-gate/http` | ≈ 1 ms (one Redis round trip); ≈ 0.01 ms when a token lease answers |
+| **Service** | many apps, many languages, edge or serverless runtimes | run `@flux-gate/server`, call it with `@flux-gate/client` or plain HTTP | ≈ 1.1 ms (one HTTP hop, leasing inside the service) |
 
 All numbers are from [the benchmarks below](#results), on one laptop.
 
@@ -39,11 +39,11 @@ All numbers are from [the benchmarks below](#results), on one laptop.
 
 | Package | What it is |
 |---|---|
-| [`@fluxgate/core`](packages/core) | Five algorithms as pure, synchronous, zero-dependency classes with an injectable clock: **fixed window, sliding window log, sliding window counter, token bucket, GCRA.** Every one supports weighted cost. |
-| [`@fluxgate/redis`](packages/redis) | Distributed stores: the **atomic Lua** token bucket, the **leased** bucket (borrows tokens in batches), and the **naive** one kept on purpose as the "before". Includes a Redis client tuned to fail fast. |
-| [`@fluxgate/http`](packages/http) | One decision function, `createCheck()`, plus adapters for **Express, Fastify, Hono and the Fetch API** (Next.js, Bun, Deno, Cloudflare Workers). Standard headers, tiers, a limiter timeout, fail-open / fail-closed and **Prometheus metrics**. |
-| [`@fluxgate/client`](packages/client) | `FluxgateClient` for service mode. `client.policy('free')` plugs into any adapter like a local limiter. |
-| [`@fluxgate/server`](packages/server) | The deployable app: `POST /v1/check` with named policies, `GET /metrics`, a demo API, all configured by environment variables. |
+| [`@flux-gate/core`](packages/core) | Five algorithms as pure, synchronous, zero-dependency classes with an injectable clock: **fixed window, sliding window log, sliding window counter, token bucket, GCRA.** Every one supports weighted cost. |
+| [`@flux-gate/redis`](packages/redis) | Distributed stores: the **atomic Lua** token bucket, the **leased** bucket (borrows tokens in batches), and the **naive** one kept on purpose as the "before". Includes a Redis client tuned to fail fast. |
+| [`@flux-gate/http`](packages/http) | One decision function, `createCheck()`, plus adapters for **Express, Fastify, Hono and the Fetch API** (Next.js, Bun, Deno, Cloudflare Workers). Standard headers, tiers, a limiter timeout, fail-open / fail-closed and **Prometheus metrics**. |
+| [`@flux-gate/client`](packages/client) | `FluxgateClient` for service mode. `client.policy('free')` plugs into any adapter like a local limiter. |
+| [`@flux-gate/server`](packages/server) | The deployable app: `POST /v1/check` with named policies, `GET /metrics`, a demo API, all configured by environment variables. |
 | [`bench`](packages/bench) | Six reproducible experiments that write `results/*.json`. `npm run report` renders them into the tables below. |
 
 > **Not on npm yet.** Until the first release, clone the repository: `npm install` links the packages to each other as a workspace.
@@ -82,9 +82,9 @@ STORE=memory docker compose --profile bench run --rm k6      # broken: about 3x 
 
 ```ts
 import express from 'express';
-import { connectRedis, RedisTokenBucket } from '@fluxgate/redis';
-import { byTier } from '@fluxgate/http';
-import { fluxgate } from '@fluxgate/http/express';
+import { connectRedis, RedisTokenBucket } from '@flux-gate/redis';
+import { byTier } from '@flux-gate/http';
+import { fluxgate } from '@flux-gate/http/express';
 
 const redis = await connectRedis({ url: process.env.REDIS_URL });
 const plans = new Map([['key:abc123', 'pro']]); // keys look like 'key:<x-api-key>' or 'ip:<addr>'; in production, your API-key store
@@ -102,15 +102,15 @@ app.use('/api', fluxgate({
 ### Fastify and Hono
 
 ```ts
-import { TokenBucketLimiter } from '@fluxgate/core';
-import { fluxgate } from '@fluxgate/http/fastify';
+import { TokenBucketLimiter } from '@flux-gate/core';
+import { fluxgate } from '@flux-gate/http/fastify';
 
 const limiter = new TokenBucketLimiter({ capacity: 20, refillPerSecond: 2 });
 app.addHook('onRequest', fluxgate({ limiter }));
 ```
 
 ```ts
-import { fluxgate } from '@fluxgate/http/hono';
+import { fluxgate } from '@flux-gate/http/hono';
 
 app.use('/api/*', fluxgate({ limiter, key: (c) => c.req.header('x-api-key') ?? 'anonymous' }));
 ```
@@ -121,8 +121,8 @@ The same adapter works for anything built on `Request` and `Response`: Bun, Deno
 
 ```ts
 // app/api/chat/route.ts
-import { RedisTokenBucket } from '@fluxgate/redis';
-import { withRateLimit } from '@fluxgate/http/fetch';
+import { RedisTokenBucket } from '@flux-gate/redis';
+import { withRateLimit } from '@flux-gate/http/fetch';
 import { redis } from '@/lib/redis'; // your connectRedis() client
 
 // Each key gets a burst of 50,000 tokens, refilled at 500 per second (30,000 a minute).
@@ -143,7 +143,7 @@ A request for 2,000 tokens is admitted only if 2,000 single-token requests in a 
 ### No framework at all
 
 ```ts
-import { createCheck } from '@fluxgate/http';
+import { createCheck } from '@flux-gate/http';
 
 const check = createCheck({ limiter, failMode: 'closed', timeoutMs: 100 });
 const decision = await check('user:42', { cost: 5 });
@@ -180,8 +180,8 @@ curl -s localhost:3100/v1/check -H 'authorization: Bearer s3cret' \
 From TypeScript, a policy behaves like a local limiter in any adapter:
 
 ```ts
-import { FluxgateClient } from '@fluxgate/client';
-import { fluxgate } from '@fluxgate/http/express';
+import { FluxgateClient } from '@flux-gate/client';
+import { fluxgate } from '@flux-gate/http/express';
 
 const ratelimit = new FluxgateClient({ url: 'http://ratelimit:3000', token: process.env.FLUXGATE_TOKEN });
 app.use('/api', fluxgate({ limiter: ratelimit.policy('free'), failMode: 'open' }));
@@ -232,7 +232,7 @@ Every app exposes `GET /metrics` in the Prometheus text format (written from scr
 Nginx blocks `/metrics` from the outside; Prometheus scrapes each instance directly. To add metrics to your own app:
 
 ```ts
-import { Metrics } from '@fluxgate/http';
+import { Metrics } from '@flux-gate/http';
 
 const metrics = new Metrics();
 app.use('/api', fluxgate({ limiter, metrics, name: 'api' }));
@@ -440,7 +440,7 @@ The same decision made four ways: the bare limiter, the HTTP layer every adapter
 | service (HTTP) | redis-leased | 1 | 1.117 | 5.337 | 690 | 0.05 |
 | service (HTTP) | redis-leased | 64 | 46.404 | 90.56 | 1,276 | 0.05 |
 
-<sub>latency per decision in ms; client, service and Redis 7.4 (Docker Desktop) on one Windows 11 machine, Node v22.17.0. "service" = `@fluxgate/client` → HTTP → the FluxGate server as a separate process (lease size 20 for redis-leased). One hot key, nothing denied. Source: `results/service.json`.</sub>
+<sub>latency per decision in ms; client, service and Redis 7.4 (Docker Desktop) on one Windows 11 machine, Node v22.17.0. "service" = `@flux-gate/client` → HTTP → the FluxGate server as a separate process (lease size 20 for redis-leased). One hot key, nothing denied. Source: `results/service.json`.</sub>
 <!-- results:service:end -->
 
 - **`check()` costs nothing you can measure.** The timeout race, headers and three metric updates are lost in the noise next to a bare `consume()`.

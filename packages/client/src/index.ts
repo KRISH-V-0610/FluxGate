@@ -1,4 +1,4 @@
-import type { AsyncRateLimiter, ConsumeOptions, RateLimitResult } from '@fluxgate/core';
+import type { AsyncRateLimiter, ConsumeOptions, RateLimitResult } from '@flux-gate/core';
 
 export interface FluxgateClientOptions {
   /** Where the FluxGate service runs, e.g. http://ratelimit:3000 */
@@ -50,7 +50,7 @@ export class FluxgateServiceError extends Error {
  * (edge functions, serverless). The same pattern as Envoy's rate-limit service.
  *
  *     const client = new FluxgateClient({ url: 'http://ratelimit:3000', token });
- *     app.use(fluxgate({ limiter: client.policy('free') }));      // any @fluxgate/http adapter
+ *     app.use(fluxgate({ limiter: client.policy('free') }));      // any @flux-gate/http adapter
  *     const result = await client.check({ policy: 'login', key: `ip:${ip}` });
  */
 export class FluxgateClient {
@@ -96,7 +96,7 @@ export class FluxgateClient {
     return body;
   }
 
-  /** A limiter backed by one of the service's policies, to pass to any @fluxgate/http adapter. */
+  /** A limiter backed by one of the service's policies, to pass to any @flux-gate/http adapter. */
   policy(name: string): AsyncRateLimiter {
     return { consume: (key: string, options: ConsumeOptions = {}) => this.check({ policy: name, key, cost: options.cost }) };
   }

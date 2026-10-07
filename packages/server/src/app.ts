@@ -1,6 +1,6 @@
 import express, { type Express } from 'express';
-import type { Metrics } from '@fluxgate/http';
-import { fluxgate, type ExpressOptions } from '@fluxgate/http/express';
+import type { Metrics } from '@flux-gate/http';
+import { fluxgate, type ExpressOptions } from '@flux-gate/http/express';
 import { createServiceRouter, type ServiceOptions } from './service.js';
 import { demoTierOf } from './tiers.js';
 
@@ -16,7 +16,7 @@ export interface AppOptions extends ExpressOptions {
   trustProxy?: boolean | number;
   /** Serve GET /metrics for Prometheus, and record every decision in it. */
   metrics?: Metrics;
-  /** Serve POST /v1/check so other apps can use these policies (see @fluxgate/client). */
+  /** Serve POST /v1/check so other apps can use these policies (see @flux-gate/client). */
   service?: Omit<ServiceOptions, 'metrics'>;
 }
 

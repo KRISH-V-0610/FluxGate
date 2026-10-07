@@ -1,4 +1,4 @@
-# @fluxgate/redis
+# @flux-gate/redis
 
 Rate limits shared by every instance of your app, stored in Redis.
 
@@ -7,18 +7,18 @@ Rate limits shared by every instance of your app, stored in Redis.
 - **`connectRedis()`**: an ioredis client tuned to fail fast (250 ms command timeout, no offline queue) instead of hanging when Redis freezes.
 
 ```bash
-npm i @fluxgate/redis
+npm i @flux-gate/redis
 ```
 
 ```ts
-import { connectRedis, RedisTokenBucket } from '@fluxgate/redis';
+import { connectRedis, RedisTokenBucket } from '@flux-gate/redis';
 
 const redis = await connectRedis({ url: process.env.REDIS_URL });
 const limiter = new RedisTokenBucket(redis, { capacity: 20, refillPerSecond: 2, prefix: 'rl:api:' });
 const result = await limiter.consume('user:42', { cost: 1 });
 ```
 
-Pair it with [`@fluxgate/http`](https://www.npmjs.com/package/@fluxgate/http) for Express, Fastify, Hono or Next.js.
+Pair it with [`@flux-gate/http`](https://www.npmjs.com/package/@flux-gate/http) for Express, Fastify, Hono or Next.js.
 
 `NaiveRedisTokenBucket` is deliberately racy, and it's exported only so the benchmarks can show the race. Don't use it.
 

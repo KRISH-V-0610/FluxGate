@@ -1,4 +1,4 @@
-import { resolveCost, type AnyRateLimiter, type RateLimitResult } from '@fluxgate/core';
+import { resolveCost, type AnyRateLimiter, type RateLimitResult } from '@flux-gate/core';
 import type { Metrics } from './metrics.js';
 
 /**
@@ -60,7 +60,7 @@ export type Decision =
   | (DecisionBase & { allowed: false; outcome: 'denied' | 'unavailable'; rejection: Rejection });
 
 export interface CheckRequest<Context> {
-  /** Units this request uses. Default 1 (see ConsumeOptions.cost in @fluxgate/core). */
+  /** Units this request uses. Default 1 (see ConsumeOptions.cost in @flux-gate/core). */
   cost?: number;
   /** Passed to `limiter` when it's a function, and to `onError`. */
   context?: Context;

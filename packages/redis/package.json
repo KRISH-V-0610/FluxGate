@@ -1,5 +1,5 @@
 {
-  "name": "@fluxgate/redis",
+  "name": "@flux-gate/redis",
   "version": "1.0.0",
   "description": "Redis-backed distributed limiters: a deliberately racy naive version, an atomic Lua token bucket, and a token-leasing variant.",
   "keywords": [
@@ -38,7 +38,7 @@
     "prepublishOnly": "tsc -b"
   },
   "dependencies": {
-    "@fluxgate/core": "1.0.0",
+    "@flux-gate/core": "1.0.0",
     "ioredis": "^6.0.0"
   },
   "engines": {
