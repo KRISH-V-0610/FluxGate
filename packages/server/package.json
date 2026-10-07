@@ -1,0 +1,28 @@
+{
+  "name": "@fluxgate/server",
+  "version": "1.0.0",
+  "description": "Express middleware (headers, tiers, fail-open/closed) and the demo API that runs behind Nginx.",
+  "license": "MIT",
+  "author": "Krish Vaghasia",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "start": "node dist/main.js"
+  },
+  "dependencies": {
+    "@fluxgate/core": "1.0.0",
+    "@fluxgate/redis": "1.0.0",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6"
+  }
+}
