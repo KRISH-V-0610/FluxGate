@@ -1,0 +1,27 @@
+{
+  "label": "redis-lua-2000rps",
+  "rate": 2000,
+  "seconds": 5,
+  "sent": 9831,
+  "allowed": 29,
+  "limited": 9802,
+  "degraded": 0,
+  "expectedGlobal": 30,
+  "allowedByInstance": {
+    "app1": 11,
+    "app2": 10,
+    "app3": 8
+  },
+  "servedByInstance": {
+    "app1": 3277,
+    "app2": 3276,
+    "app3": 3278
+  },
+  "latencyMs": {
+    "p50": 5.074251,
+    "p90": 35.064827,
+    "p95": 48.160016,
+    "p99": 77.69524900000098,
+    "max": 231.257841
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "generatedAt": "2026-10-07T07:35:58.758Z",
+  "setup": {
+    "capacity": 10,
+    "requests": 200,
+    "trials": 5
+  },
+  "rows": [
+    {
+      "concurrency": 1,
+      "limiter": "naive (GET → JS → SET)",
+      "admittedMean": 10,
+      "admittedMax": 10,
+      "overAdmission": 1
+    },
+    {
+      "concurrency": 1,
+      "limiter": "atomic (Lua)",
+      "admittedMean": 10,
+      "admittedMax": 10,
+      "overAdmission": 1
+    },
+    {
+      "concurrency": 2,
+      "limiter": "naive (GET → JS → SET)",
+      "admittedMean": 19.4,
+      "admittedMax": 20,
+      "overAdmission": 1.94
+    },
+    {
+      "concurrency": 2,
+      "limiter": "atomic (Lua)",
+      "admittedMean": 10,
+      "admittedMax": 10,
+      "overAdmission": 1
+    },
+    {
+      "concurrency": 5,
+      "limiter": "naive (GET → JS → SET)",
+      "admittedMean": 42.6,
+      "admittedMax": 50,
+      "overAdmission": 4.26
+    },
+    {
+      "concurrency": 5,
+      "limiter": "atomic (Lua)",
+      "admittedMean": 10,
+      "admittedMax": 10,
+      "overAdmission": 1
+    },
+    {
+      "concurrency": 10,
+      "limiter": "naive (GET → JS → SET)",
+      "admittedMean": 68.4,
+      "admittedMax": 71,
+      "overAdmission": 6.84
+    },
+    {
+      "concurrency": 10,
+      "limiter": "atomic (Lua)",
+      "admittedMean": 10,
+      "admittedMax": 10,
+      "overAdmission": 1
+    },
+    {
+      "concurrency": 25,
+      "limiter": "naive (GET → JS → SET)",
+      "admittedMean": 156.8,
+      "admittedMax": 169,
+      "overAdmission": 15.68
+    },
+    {
+      "concurrency": 25,
+      "limiter": "atomic (Lua)",
+      "admittedMean": 10,
+      "admittedMax": 10,
+      "overAdmission": 1
+    },
+    {
+      "concurrency": 50,
+      "limiter": "naive (GET → JS → SET)",
+      "admittedMean": 200,
+      "admittedMax": 200,
+      "overAdmission": 20
+    },
+    {
+      "concurrency": 50,
+      "limiter": "atomic (Lua)",
+      "admittedMean": 10,
+      "admittedMax": 10,
+      "overAdmission": 1
+    },
+    {
+      "concurrency": 100,
+      "limiter": "naive (GET → JS → SET)",
+      "admittedMean": 200,
+      "admittedMax": 200,
+      "overAdmission": 20
+    },
+    {
+      "concurrency": 100,
+      "limiter": "atomic (Lua)",
+      "admittedMean": 10,
+      "admittedMax": 10,
+      "overAdmission": 1
+    },
+    {
+      "concurrency": 200,
+      "limiter": "naive (GET → JS → SET)",
+      "admittedMean": 200,
+      "admittedMax": 200,
+      "overAdmission": 20
+    },
+    {
+      "concurrency": 200,
+      "limiter": "atomic (Lua)",
+      "admittedMean": 10,
+      "admittedMax": 10,
+      "overAdmission": 1
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "label": "redis-leased",
+  "rate": 100,
+  "seconds": 10,
+  "sent": 1001,
+  "allowed": 39,
+  "limited": 962,
+  "degraded": 0,
+  "expectedGlobal": 40,
+  "allowedByInstance": {
+    "app1": 21,
+    "app2": 11,
+    "app3": 7
+  },
+  "servedByInstance": {
+    "app1": 338,
+    "app2": 337,
+    "app3": 326
+  },
+  "latencyMs": {
+    "p50": 1.308155,
+    "p90": 2.031195,
+    "p95": 2.295452,
+    "p99": 3.498716,
+    "max": 7.119929
+  }
+}

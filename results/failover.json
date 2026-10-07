@@ -1,0 +1,488 @@
+{
+  "generatedAt": "2026-10-07T07:44:00.261Z",
+  "setup": {
+    "ratePerSecond": 200,
+    "durationMs": 9000,
+    "pausedFromMs": 3000,
+    "resumedAtMs": 6000
+  },
+  "results": [
+    {
+      "variant": "library defaults",
+      "actual": {
+        "pausedAtMs": 3301,
+        "resumedAtMs": 6481
+      },
+      "summary": {
+        "requestsDuringOutage": 610,
+        "servedDuringOutagePct": 100,
+        "p50DuringOutageMs": 1840,
+        "p99DuringOutageMs": 3137
+      },
+      "slices": [
+        {
+          "t": 0,
+          "redis": "up",
+          "ok": 94,
+          "degraded": 0,
+          "rejected503": 0,
+          "p99ms": 90
+        },
+        {
+          "t": 0.5,
+          "redis": "up",
+          "ok": 99,
+          "degraded": 0,
+          "rejected503": 0,
+          "p99ms": 11
+        },
+        {
+          "t": 1,
+          "redis": "up",
+          "ok": 92,
+          "degraded": 0,
+          "rejected503": 0,
+          "p99ms": 10
+        },
+        {
+          "t": 1.5,
+          "redis": "up",
+          "ok": 97,
+          "degraded": 0,
+          "rejected503": 0,
+          "p99ms": 4
+        },
+        {
+          "t": 2,
+          "redis": "up",
+          "ok": 89,
+          "degraded": 0,
+          "rejected503": 0,
+          "p99ms": 6
+        },
+        {
+          "t": 2.5,
+          "redis": "up",
+          "ok": 104,
+          "degraded": 0,
+          "rejected503": 0,
+          "p99ms": 8
+        },
+        {
+          "t": 3,
+          "redis": "paused",
+          "ok": 87,
+          "degraded": 0,
+          "rejected503": 0,
+          "p99ms": 3152
+        },
+        {
+          "t": 3.5,
+          "redis": "paused",
+          "ok": 112,
+          "degraded": 0,
+          "rejected503": 0,
+          "p99ms": 2882
+        },
+        {
+          "t": 4,
+          "redis": "paused",
+          "ok": 110,
+          "degraded": 0,
+          "rejected503": 0,
+          "p99ms": 2442
+        },
+        {
+          "t": 4.5,
+          "redis": "paused",
+          "ok": 97,
+          "degraded": 0,
+          "rejected503": 0,
+          "p99ms": 1986
+        },
+        {
+          "t": 5,
+          "redis": "paused",
+          "ok": 106,
+          "degraded": 0,
+          "rejected503": 0,
+          "p99ms": 1499
+        },
+        {
+          "t": 5.5,
+          "redis": "paused",
+          "ok": 98,
+          "degraded": 0,
+          "rejected503": 0,
+          "p99ms": 1033
+        },
+        {
+          "t": 6,
+          "redis": "up",
+          "ok": 107,
+          "degraded": 0,
+          "rejected503": 0,
+          "p99ms": 544
+        },
+        {
+          "t": 6.5,
+          "redis": "up",
+          "ok": 87,
+          "degraded": 0,
+          "rejected503": 0,
+          "p99ms": 103
+        },
+        {
+          "t": 7,
+          "redis": "up",
+          "ok": 118,
+          "degraded": 0,
+          "rejected503": 0,
+          "p99ms": 4
+        },
+        {
+          "t": 7.5,
+          "redis": "up",
+          "ok": 111,
+          "degraded": 0,
+          "rejected503": 0,
+          "p99ms": 6
+        },
+        {
+          "t": 8,
+          "redis": "up",
+          "ok": 115,
+          "degraded": 0,
+          "rejected503": 0,
+          "p99ms": 9
+        },
+        {
+          "t": 8.5,
+          "redis": "up",
+          "ok": 112,
+          "degraded": 0,
+          "rejected503": 0,
+          "p99ms": 9
+        }
+      ]
+    },
+    {
+      "variant": "fail-open",
+      "actual": {
+        "pausedAtMs": 3363,
+        "resumedAtMs": 6323
+      },
+      "summary": {
+        "requestsDuringOutage": 610,
+        "servedDuringOutagePct": 100,
+        "p50DuringOutageMs": 111,
+        "p99DuringOutageMs": 116
+      },
+      "slices": [
+        {
+          "t": 0,
+          "redis": "up",
+          "ok": 94,
+          "degraded": 0,
+          "rejected503": 0,
+          "p99ms": 9
+        },
+        {
+          "t": 0.5,
+          "redis": "up",
+          "ok": 99,
+          "degraded": 0,
+          "rejected503": 0,
+          "p99ms": 6
+        },
+        {
+          "t": 1,
+          "redis": "up",
+          "ok": 92,
+          "degraded": 0,
+          "rejected503": 0,
+          "p99ms": 6
+        },
+        {
+          "t": 1.5,
+          "redis": "up",
+          "ok": 97,
+          "degraded": 0,
+          "rejected503": 0,
+          "p99ms": 7
+        },
+        {
+          "t": 2,
+          "redis": "up",
+          "ok": 89,
+          "degraded": 0,
+          "rejected503": 0,
+          "p99ms": 5
+        },
+        {
+          "t": 2.5,
+          "redis": "up",
+          "ok": 104,
+          "degraded": 0,
+          "rejected503": 0,
+          "p99ms": 5
+        },
+        {
+          "t": 3,
+          "redis": "paused",
+          "ok": 44,
+          "degraded": 43,
+          "rejected503": 0,
+          "p99ms": 117
+        },
+        {
+          "t": 3.5,
+          "redis": "paused",
+          "ok": 0,
+          "degraded": 112,
+          "rejected503": 0,
+          "p99ms": 116
+        },
+        {
+          "t": 4,
+          "redis": "paused",
+          "ok": 0,
+          "degraded": 110,
+          "rejected503": 0,
+          "p99ms": 115
+        },
+        {
+          "t": 4.5,
+          "redis": "paused",
+          "ok": 0,
+          "degraded": 97,
+          "rejected503": 0,
+          "p99ms": 114
+        },
+        {
+          "t": 5,
+          "redis": "paused",
+          "ok": 0,
+          "degraded": 106,
+          "rejected503": 0,
+          "p99ms": 115
+        },
+        {
+          "t": 5.5,
+          "redis": "paused",
+          "ok": 0,
+          "degraded": 98,
+          "rejected503": 0,
+          "p99ms": 116
+        },
+        {
+          "t": 6,
+          "redis": "up",
+          "ok": 75,
+          "degraded": 32,
+          "rejected503": 0,
+          "p99ms": 118
+        },
+        {
+          "t": 6.5,
+          "redis": "up",
+          "ok": 87,
+          "degraded": 0,
+          "rejected503": 0,
+          "p99ms": 7
+        },
+        {
+          "t": 7,
+          "redis": "up",
+          "ok": 118,
+          "degraded": 0,
+          "rejected503": 0,
+          "p99ms": 7
+        },
+        {
+          "t": 7.5,
+          "redis": "up",
+          "ok": 111,
+          "degraded": 0,
+          "rejected503": 0,
+          "p99ms": 6
+        },
+        {
+          "t": 8,
+          "redis": "up",
+          "ok": 115,
+          "degraded": 0,
+          "rejected503": 0,
+          "p99ms": 15
+        },
+        {
+          "t": 8.5,
+          "redis": "up",
+          "ok": 113,
+          "degraded": 0,
+          "rejected503": 0,
+          "p99ms": 5
+        }
+      ]
+    },
+    {
+      "variant": "fail-closed",
+      "actual": {
+        "pausedAtMs": 3404,
+        "resumedAtMs": 6288
+      },
+      "summary": {
+        "requestsDuringOutage": 610,
+        "servedDuringOutagePct": 9.7,
+        "p50DuringOutageMs": 110,
+        "p99DuringOutageMs": 115
+      },
+      "slices": [
+        {
+          "t": 0,
+          "redis": "up",
+          "ok": 94,
+          "degraded": 0,
+          "rejected503": 0,
+          "p99ms": 4
+        },
+        {
+          "t": 0.5,
+          "redis": "up",
+          "ok": 99,
+          "degraded": 0,
+          "rejected503": 0,
+          "p99ms": 9
+        },
+        {
+          "t": 1,
+          "redis": "up",
+          "ok": 92,
+          "degraded": 0,
+          "rejected503": 0,
+          "p99ms": 6
+        },
+        {
+          "t": 1.5,
+          "redis": "up",
+          "ok": 97,
+          "degraded": 0,
+          "rejected503": 0,
+          "p99ms": 4
+        },
+        {
+          "t": 2,
+          "redis": "up",
+          "ok": 89,
+          "degraded": 0,
+          "rejected503": 0,
+          "p99ms": 10
+        },
+        {
+          "t": 2.5,
+          "redis": "up",
+          "ok": 104,
+          "degraded": 0,
+          "rejected503": 0,
+          "p99ms": 5
+        },
+        {
+          "t": 3,
+          "redis": "paused",
+          "ok": 59,
+          "degraded": 0,
+          "rejected503": 28,
+          "p99ms": 113
+        },
+        {
+          "t": 3.5,
+          "redis": "paused",
+          "ok": 0,
+          "degraded": 0,
+          "rejected503": 112,
+          "p99ms": 114
+        },
+        {
+          "t": 4,
+          "redis": "paused",
+          "ok": 0,
+          "degraded": 0,
+          "rejected503": 110,
+          "p99ms": 112
+        },
+        {
+          "t": 4.5,
+          "redis": "paused",
+          "ok": 0,
+          "degraded": 0,
+          "rejected503": 97,
+          "p99ms": 113
+        },
+        {
+          "t": 5,
+          "redis": "paused",
+          "ok": 0,
+          "degraded": 0,
+          "rejected503": 106,
+          "p99ms": 116
+        },
+        {
+          "t": 5.5,
+          "redis": "paused",
+          "ok": 0,
+          "degraded": 0,
+          "rejected503": 98,
+          "p99ms": 113
+        },
+        {
+          "t": 6,
+          "redis": "up",
+          "ok": 81,
+          "degraded": 0,
+          "rejected503": 26,
+          "p99ms": 112
+        },
+        {
+          "t": 6.5,
+          "redis": "up",
+          "ok": 87,
+          "degraded": 0,
+          "rejected503": 0,
+          "p99ms": 12
+        },
+        {
+          "t": 7,
+          "redis": "up",
+          "ok": 118,
+          "degraded": 0,
+          "rejected503": 0,
+          "p99ms": 24
+        },
+        {
+          "t": 7.5,
+          "redis": "up",
+          "ok": 111,
+          "degraded": 0,
+          "rejected503": 0,
+          "p99ms": 10
+        },
+        {
+          "t": 8,
+          "redis": "up",
+          "ok": 115,
+          "degraded": 0,
+          "rejected503": 0,
+          "p99ms": 7
+        },
+        {
+          "t": 8.5,
+          "redis": "up",
+          "ok": 113,
+          "degraded": 0,
+          "rejected503": 0,
+          "p99ms": 6
+        }
+      ]
+    }
+  ]
+}

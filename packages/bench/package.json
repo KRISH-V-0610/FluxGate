@@ -1,0 +1,21 @@
+{
+  "name": "@fluxgate/bench",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Evaluation suite: race reproduction, accuracy vs exact log, latency, token leasing, Redis failover.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "tsc -b"
+  },
+  "dependencies": {
+    "@fluxgate/core": "1.0.0",
+    "@fluxgate/redis": "1.0.0",
+    "@fluxgate/server": "1.0.0",
+    "express": "^5.2.1",
+    "ioredis": "^6.0.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6"
+  }
+}

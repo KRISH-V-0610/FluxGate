@@ -1,0 +1,282 @@
+{
+  "generatedAt": "2026-10-07T07:35:48.820Z",
+  "setup": {
+    "limit": 100,
+    "windowMs": 60000,
+    "durationMs": 7200000,
+    "patterns": [
+      {
+        "name": "light",
+        "description": "Poisson, 0.5x the limit"
+      },
+      {
+        "name": "normal",
+        "description": "Poisson, 0.9x the limit"
+      },
+      {
+        "name": "steady",
+        "description": "Poisson, 1.5x the limit"
+      },
+      {
+        "name": "bursty",
+        "description": "on/off, 10x spikes"
+      },
+      {
+        "name": "adversarial",
+        "description": "full limit on both sides of every boundary"
+      }
+    ]
+  },
+  "rows": [
+    {
+      "pattern": "light",
+      "algorithm": "sliding-log (exact)",
+      "requests": 6050,
+      "admitted": 6050,
+      "peakInAnyWindow": 77,
+      "peakOverLimit": 0.77,
+      "wrongAllowPct": 0,
+      "wrongDenyPct": 0
+    },
+    {
+      "pattern": "light",
+      "algorithm": "fixed-window",
+      "requests": 6050,
+      "admitted": 6050,
+      "peakInAnyWindow": 77,
+      "peakOverLimit": 0.77,
+      "wrongAllowPct": 0,
+      "wrongDenyPct": 0
+    },
+    {
+      "pattern": "light",
+      "algorithm": "sliding-counter",
+      "requests": 6050,
+      "admitted": 6050,
+      "peakInAnyWindow": 77,
+      "peakOverLimit": 0.77,
+      "wrongAllowPct": 0,
+      "wrongDenyPct": 0
+    },
+    {
+      "pattern": "light",
+      "algorithm": "token-bucket",
+      "requests": 6050,
+      "admitted": 6050,
+      "peakInAnyWindow": 77,
+      "peakOverLimit": 0.77,
+      "wrongAllowPct": 0,
+      "wrongDenyPct": 0
+    },
+    {
+      "pattern": "light",
+      "algorithm": "gcra",
+      "requests": 6050,
+      "admitted": 6050,
+      "peakInAnyWindow": 77,
+      "peakOverLimit": 0.77,
+      "wrongAllowPct": 0,
+      "wrongDenyPct": 0
+    },
+    {
+      "pattern": "normal",
+      "algorithm": "sliding-log (exact)",
+      "requests": 10838,
+      "admitted": 10544,
+      "peakInAnyWindow": 100,
+      "peakOverLimit": 1,
+      "wrongAllowPct": 0,
+      "wrongDenyPct": 0
+    },
+    {
+      "pattern": "normal",
+      "algorithm": "fixed-window",
+      "requests": 10838,
+      "admitted": 10759,
+      "peakInAnyWindow": 123,
+      "peakOverLimit": 1.23,
+      "wrongAllowPct": 12.899,
+      "wrongDenyPct": 0
+    },
+    {
+      "pattern": "normal",
+      "algorithm": "sliding-counter",
+      "requests": 10838,
+      "admitted": 10657,
+      "peakInAnyWindow": 113,
+      "peakOverLimit": 1.13,
+      "wrongAllowPct": 7.308,
+      "wrongDenyPct": 0.535
+    },
+    {
+      "pattern": "normal",
+      "algorithm": "token-bucket",
+      "requests": 10838,
+      "admitted": 10838,
+      "peakInAnyWindow": 123,
+      "peakOverLimit": 1.23,
+      "wrongAllowPct": 16.507,
+      "wrongDenyPct": 0
+    },
+    {
+      "pattern": "normal",
+      "algorithm": "gcra",
+      "requests": 10838,
+      "admitted": 10838,
+      "peakInAnyWindow": 123,
+      "peakOverLimit": 1.23,
+      "wrongAllowPct": 16.507,
+      "wrongDenyPct": 0
+    },
+    {
+      "pattern": "steady",
+      "algorithm": "sliding-log (exact)",
+      "requests": 17867,
+      "admitted": 11768,
+      "peakInAnyWindow": 100,
+      "peakOverLimit": 1,
+      "wrongAllowPct": 0,
+      "wrongDenyPct": 0
+    },
+    {
+      "pattern": "steady",
+      "algorithm": "fixed-window",
+      "requests": 17867,
+      "admitted": 12000,
+      "peakInAnyWindow": 143,
+      "peakOverLimit": 1.43,
+      "wrongAllowPct": 33.402,
+      "wrongDenyPct": 0
+    },
+    {
+      "pattern": "steady",
+      "algorithm": "sliding-counter",
+      "requests": 17867,
+      "admitted": 11906,
+      "peakInAnyWindow": 110,
+      "peakOverLimit": 1.1,
+      "wrongAllowPct": 20.972,
+      "wrongDenyPct": 8.658
+    },
+    {
+      "pattern": "steady",
+      "algorithm": "token-bucket",
+      "requests": 17867,
+      "admitted": 12098,
+      "peakInAnyWindow": 167,
+      "peakOverLimit": 1.67,
+      "wrongAllowPct": 34.539,
+      "wrongDenyPct": 0
+    },
+    {
+      "pattern": "steady",
+      "algorithm": "gcra",
+      "requests": 17867,
+      "admitted": 12098,
+      "peakInAnyWindow": 167,
+      "peakOverLimit": 1.67,
+      "wrongAllowPct": 34.539,
+      "wrongDenyPct": 0
+    },
+    {
+      "pattern": "bursty",
+      "algorithm": "sliding-log (exact)",
+      "requests": 23885,
+      "admitted": 7913,
+      "peakInAnyWindow": 100,
+      "peakOverLimit": 1,
+      "wrongAllowPct": 0,
+      "wrongDenyPct": 0
+    },
+    {
+      "pattern": "bursty",
+      "algorithm": "fixed-window",
+      "requests": 23885,
+      "admitted": 9476,
+      "peakInAnyWindow": 200,
+      "peakOverLimit": 2,
+      "wrongAllowPct": 14.767,
+      "wrongDenyPct": 0
+    },
+    {
+      "pattern": "bursty",
+      "algorithm": "sliding-counter",
+      "requests": 23885,
+      "admitted": 8304,
+      "peakInAnyWindow": 159,
+      "peakOverLimit": 1.59,
+      "wrongAllowPct": 7.168,
+      "wrongDenyPct": 30.048
+    },
+    {
+      "pattern": "bursty",
+      "algorithm": "token-bucket",
+      "requests": 23885,
+      "admitted": 9960,
+      "peakInAnyWindow": 199,
+      "peakOverLimit": 1.99,
+      "wrongAllowPct": 17.521,
+      "wrongDenyPct": 0
+    },
+    {
+      "pattern": "bursty",
+      "algorithm": "gcra",
+      "requests": 23885,
+      "admitted": 9960,
+      "peakInAnyWindow": 199,
+      "peakOverLimit": 1.99,
+      "wrongAllowPct": 17.521,
+      "wrongDenyPct": 0
+    },
+    {
+      "pattern": "adversarial",
+      "algorithm": "sliding-log (exact)",
+      "requests": 12000,
+      "admitted": 6000,
+      "peakInAnyWindow": 100,
+      "peakOverLimit": 1,
+      "wrongAllowPct": 0,
+      "wrongDenyPct": 0
+    },
+    {
+      "pattern": "adversarial",
+      "algorithm": "fixed-window",
+      "requests": 12000,
+      "admitted": 12000,
+      "peakInAnyWindow": 200,
+      "peakOverLimit": 2,
+      "wrongAllowPct": 50,
+      "wrongDenyPct": 0
+    },
+    {
+      "pattern": "adversarial",
+      "algorithm": "sliding-counter",
+      "requests": 12000,
+      "admitted": 6060,
+      "peakInAnyWindow": 101,
+      "peakOverLimit": 1.01,
+      "wrongAllowPct": 0.5,
+      "wrongDenyPct": 0
+    },
+    {
+      "pattern": "adversarial",
+      "algorithm": "token-bucket",
+      "requests": 12000,
+      "admitted": 6060,
+      "peakInAnyWindow": 101,
+      "peakOverLimit": 1.01,
+      "wrongAllowPct": 0.5,
+      "wrongDenyPct": 0
+    },
+    {
+      "pattern": "adversarial",
+      "algorithm": "gcra",
+      "requests": 12000,
+      "admitted": 6060,
+      "peakInAnyWindow": 101,
+      "peakOverLimit": 1.01,
+      "wrongAllowPct": 0.5,
+      "wrongDenyPct": 0
+    }
+  ]
+}

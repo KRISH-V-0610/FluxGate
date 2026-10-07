@@ -1,0 +1,27 @@
+{
+  "label": "memory",
+  "rate": 100,
+  "seconds": 10,
+  "sent": 1001,
+  "allowed": 117,
+  "limited": 884,
+  "degraded": 0,
+  "expectedGlobal": 40,
+  "allowedByInstance": {
+    "app1": 39,
+    "app2": 39,
+    "app3": 39
+  },
+  "servedByInstance": {
+    "app1": 334,
+    "app2": 333,
+    "app3": 334
+  },
+  "latencyMs": {
+    "p50": 1.172104,
+    "p90": 1.67872,
+    "p95": 2.05621,
+    "p99": 3.561801,
+    "max": 6.526157
+  }
+}

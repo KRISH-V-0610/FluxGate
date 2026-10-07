@@ -1,0 +1,96 @@
+{
+  "generatedAt": "2026-10-07T07:37:26.552Z",
+  "setup": {
+    "note": "consume() latency in ms, measured in-process; Redis 7.4 in Docker Desktop on the same machine"
+  },
+  "rows": [
+    {
+      "store": "memory (single instance)",
+      "inFlight": 1,
+      "samples": 5000,
+      "p50": 0.001,
+      "p90": 0.001,
+      "p99": 0.003,
+      "max": 0.196,
+      "throughputPerSec": 712393,
+      "redisCallsPerRequest": 0
+    },
+    {
+      "store": "memory (single instance)",
+      "inFlight": 64,
+      "samples": 30000,
+      "p50": 0.031,
+      "p90": 0.045,
+      "p99": 0.147,
+      "max": 1.307,
+      "throughputPerSec": 1600999,
+      "redisCallsPerRequest": 0
+    },
+    {
+      "store": "redis-naive (2 round trips)",
+      "inFlight": 1,
+      "samples": 5000,
+      "p50": 3.334,
+      "p90": 5.826,
+      "p99": 10.629,
+      "max": 55.334,
+      "throughputPerSec": 271,
+      "redisCallsPerRequest": 2
+    },
+    {
+      "store": "redis-naive (2 round trips)",
+      "inFlight": 64,
+      "samples": 30000,
+      "p50": 14.346,
+      "p90": 23.236,
+      "p99": 37.883,
+      "max": 91.639,
+      "throughputPerSec": 3995,
+      "redisCallsPerRequest": 2
+    },
+    {
+      "store": "redis-lua (1 round trip)",
+      "inFlight": 1,
+      "samples": 5000,
+      "p50": 0.881,
+      "p90": 1.761,
+      "p99": 2.691,
+      "max": 4.788,
+      "throughputPerSec": 942,
+      "redisCallsPerRequest": 1
+    },
+    {
+      "store": "redis-lua (1 round trip)",
+      "inFlight": 64,
+      "samples": 30000,
+      "p50": 4.113,
+      "p90": 5.576,
+      "p99": 7.81,
+      "max": 10.128,
+      "throughputPerSec": 14859,
+      "redisCallsPerRequest": 1
+    },
+    {
+      "store": "redis-leased (lease 20)",
+      "inFlight": 1,
+      "samples": 5000,
+      "p50": 0,
+      "p90": 0.001,
+      "p99": 0.818,
+      "max": 1.749,
+      "throughputPerSec": 26308,
+      "redisCallsPerRequest": 0.05
+    },
+    {
+      "store": "redis-leased (lease 20)",
+      "inFlight": 64,
+      "samples": 30000,
+      "p50": 2.578,
+      "p90": 5.058,
+      "p99": 7.884,
+      "max": 15.586,
+      "throughputPerSec": 20795,
+      "redisCallsPerRequest": 0.05
+    }
+  ]
+}

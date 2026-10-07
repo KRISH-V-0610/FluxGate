@@ -1,0 +1,27 @@
+{
+  "label": "redis-naive",
+  "rate": 100,
+  "seconds": 10,
+  "sent": 1001,
+  "allowed": 39,
+  "limited": 962,
+  "degraded": 0,
+  "expectedGlobal": 40,
+  "allowedByInstance": {
+    "app1": 12,
+    "app2": 14,
+    "app3": 13
+  },
+  "servedByInstance": {
+    "app1": 334,
+    "app2": 335,
+    "app3": 332
+  },
+  "latencyMs": {
+    "p50": 1.983551,
+    "p90": 3.68584,
+    "p95": 4.323524,
+    "p99": 6.076947,
+    "max": 13.448912
+  }
+}
