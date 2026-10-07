@@ -1,6 +1,6 @@
 import type { Redis } from 'ioredis';
-import { tokenBucketStep } from '@fluxgate/core';
-import type { AsyncRateLimiter, RateLimitResult, TokenBucketConfig, TokenBucketState } from '@fluxgate/core';
+import { resolveCost, tokenBucketStep } from '@fluxgate/core';
+import type { AsyncRateLimiter, ConsumeOptions, RateLimitResult, TokenBucketConfig, TokenBucketState } from '@fluxgate/core';
 
 export interface RedisLimiterConfig extends TokenBucketConfig {
   /** Namespace for this limiter's keys, so tiers/limiters never share a bucket. */
@@ -41,7 +41,8 @@ export class NaiveRedisTokenBucket implements AsyncRateLimiter {
     this.prefix = config.prefix ?? 'fluxgate:naive:';
   }
 
-  async consume(key: string): Promise<RateLimitResult> {
+  async consume(key: string, options: ConsumeOptions = {}): Promise<RateLimitResult> {
+    const cost = resolveCost(options.cost);
     const redisKey = this.prefix + key;
     const now = Date.now();
 
@@ -54,7 +55,7 @@ export class NaiveRedisTokenBucket implements AsyncRateLimiter {
         : undefined;
 
     // 2. DECIDE. Meanwhile other requests are reading the same old state.
-    const next = tokenBucketStep(state, this.config, now);
+    const next = tokenBucketStep(state, this.config, now, cost);
 
     // 3. WRITE
     this.calls++;

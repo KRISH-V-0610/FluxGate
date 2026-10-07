@@ -1,5 +1,5 @@
-import type { RateLimiter, RateLimitResult, SlidingWindowCounterConfig } from './types.js';
-import { assertPositive } from './validate.js';
+import type { LocalConsumeOptions, RateLimiter, RateLimitResult, SlidingWindowCounterConfig } from './types.js';
+import { assertPositive, resolveCost } from './validate.js';
 
 /**
  * Sliding window counter (Cloudflare's approximation).
@@ -36,7 +36,9 @@ export class SlidingWindowCounterLimiter implements RateLimiter {
     this.windowMs = config.windowMs;
   }
 
-  consume(key: string, now: number = Date.now()): RateLimitResult {
+  consume(key: string, options: LocalConsumeOptions = {}): RateLimitResult {
+    const now = options.now ?? Date.now();
+    const cost = resolveCost(options.cost);
     const windowIndex = Math.floor(now / this.windowMs);
     const entry = this.roll(key, windowIndex);
 
@@ -48,25 +50,24 @@ export class SlidingWindowCounterLimiter implements RateLimiter {
     const windowEnd = (windowIndex + 1) * this.windowMs;
     const resetMs = windowEnd + this.windowMs - now;
 
-    // Cloudflare's rule: allow while the estimated rate is below the limit.
-    if (estimate < this.limit) {
-      entry.current++;
-      const after = estimate + 1;
+    // Cloudflare's rule for one request: allow while the estimate is below
+    // the limit. A request of cost N is N of those in a row, and they all
+    // pass exactly when the last one does: estimate + (N - 1) < limit.
+    if (estimate + cost - 1 < this.limit) {
+      entry.current += cost;
       return {
         allowed: true,
         limit: this.limit,
-        remaining: Math.max(0, Math.ceil(this.limit - after)),
+        remaining: Math.max(0, Math.ceil(this.limit - (estimate + cost))),
         resetMs,
       };
     }
 
-    return {
-      allowed: false,
-      limit: this.limit,
-      remaining: 0,
-      resetMs,
-      retryAfterMs: this.retryAfter(entry.previous, entry.current, elapsed, windowEnd - now),
-    };
+    const denied = { allowed: false, limit: this.limit, remaining: Math.max(0, Math.ceil(this.limit - estimate)), resetMs };
+    // Waiting for room for N units is waiting for a limit that is N - 1 lower.
+    const effectiveLimit = this.limit - (cost - 1);
+    if (effectiveLimit <= 0) return denied; // can never fit, so no retryAfterMs
+    return { ...denied, retryAfterMs: this.retryAfter(effectiveLimit, entry.previous, entry.current, elapsed, windowEnd - now) };
   }
 
   /** Move the key's counters forward if time has moved into a new window. */
@@ -90,15 +91,15 @@ export class SlidingWindowCounterLimiter implements RateLimiter {
    * already fills the limit, we must wait for the next window where `current`
    * becomes the decaying `previous`.
    */
-  private retryAfter(previous: number, current: number, elapsed: number, untilWindowEnd: number): number {
+  private retryAfter(limit: number, previous: number, current: number, elapsed: number, untilWindowEnd: number): number {
     const W = this.windowMs;
-    if (current < this.limit && previous > 0) {
+    if (current < limit && previous > 0) {
       // previous * (W - e) / W + current < limit  =>  e > W * (1 - (limit - current) / previous)
-      const neededElapsed = W * (1 - (this.limit - current) / previous);
+      const neededElapsed = W * (1 - (limit - current) / previous);
       return Math.max(1, Math.floor(neededElapsed - elapsed) + 1);
     }
     // Next window: current * (W - e) / W < limit  =>  e > W * (1 - limit / current)
-    const neededElapsed = Math.max(0, W * (1 - this.limit / current));
+    const neededElapsed = Math.max(0, W * (1 - limit / current));
     return untilWindowEnd + Math.floor(neededElapsed) + 1;
   }
 }

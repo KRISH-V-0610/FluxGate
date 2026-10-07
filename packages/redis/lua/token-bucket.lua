@@ -9,14 +9,18 @@
 -- KEYS[1]  bucket hash: { tokens, ts }
 -- ARGV[1]  capacity
 -- ARGV[2]  refill rate, tokens per second
--- ARGV[3]  want: 1 for a normal request, N to lease a batch (takes min(N, available))
+-- ARGV[3]  want: the most tokens to take (a request's cost, or a lease batch)
 -- ARGV[4]  optional "now" in ms, for deterministic tests only; empty = Redis' own clock
+-- ARGV[5]  need: take nothing unless at least this many are available (default 1).
+--          need = want is all-or-nothing (a request of cost N); need < want
+--          takes a partial batch (leasing: "up to 20, but at least my cost").
 --
 -- Returns { granted, remaining, reset_ms, retry_after_ms }
 
 local capacity = tonumber(ARGV[1])
 local refill_per_ms = tonumber(ARGV[2]) / 1000
 local want = tonumber(ARGV[3])
+local need = tonumber(ARGV[5]) or 1
 local EPSILON = 1e-6
 
 -- Whose clock? Redis' clock, not the app server's. With 3 app instances
@@ -42,15 +46,17 @@ end
 local elapsed = math.max(0, now - last)
 tokens = math.min(capacity, tokens + elapsed * refill_per_ms)
 
-local granted = math.min(want, math.floor(tokens + EPSILON))
-if granted > 0 then
+local available = math.floor(tokens + EPSILON)
+local granted = 0
+if available >= need then
+  granted = math.min(want, available)
   tokens = math.max(0, tokens - granted)
 end
 
 local reset_ms = math.ceil((capacity - tokens) / refill_per_ms)
 local retry_after_ms = 0
 if granted == 0 then
-  retry_after_ms = math.ceil((1 - tokens) / refill_per_ms)
+  retry_after_ms = math.ceil((need - tokens) / refill_per_ms)
 end
 
 -- %.17g keeps full double precision (tostring would round to 14 digits).

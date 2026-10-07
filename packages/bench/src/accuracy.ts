@@ -107,7 +107,7 @@ for (const pattern of patterns) {
     for (const t of pattern.times) {
       while (oldest < admitted.length && admitted[oldest]! <= t - WINDOW) oldest++;
       const shouldAllow = admitted.length - oldest < LIMIT;
-      const allowed = limiter.consume('k', t).allowed;
+      const allowed = limiter.consume('k', { now: t }).allowed;
       if (allowed) admitted.push(t);
       if (allowed && !shouldAllow) wrongAllow++;
       if (!allowed && shouldAllow) wrongDeny++;

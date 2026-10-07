@@ -10,29 +10,29 @@ describe('SlidingWindowCounterLimiter', () => {
     const limiter = new SlidingWindowCounterLimiter({ limit: 50, windowMs: MINUTE });
 
     // Previous minute: 42 requests.
-    for (let i = 0; i < 42; i++) expect(limiter.consume('k', i * 1000).allowed).toBe(true);
+    for (let i = 0; i < 42; i++) expect(limiter.consume('k', { now: i * 1000 }).allowed).toBe(true);
     // Current minute: 18 requests, all before the 15 s mark.
-    for (let i = 0; i < 18; i++) expect(limiter.consume('k', MINUTE + 14_000).allowed).toBe(true);
+    for (let i = 0; i < 18; i++) expect(limiter.consume('k', { now: MINUTE + 14_000 }).allowed).toBe(true);
 
     // 15 s into the minute the previous window still overlaps by 45/60 = 0.75.
     // estimate = 42 * 0.75 + 18 = 49.5, below 50, so this one is allowed...
-    const allowed = limiter.consume('k', MINUTE + 15_000);
+    const allowed = limiter.consume('k', { now: MINUTE + 15_000 });
     expect(allowed).toMatchObject({ allowed: true, remaining: 0 });
 
     // ...and the next is not: 42 * 0.75 + 19 = 50.5.
-    const denied = limiter.consume('k', MINUTE + 15_000);
+    const denied = limiter.consume('k', { now: MINUTE + 15_000 });
     expect(denied.allowed).toBe(false);
 
     // retryAfterMs is exact: one ms earlier is still denied, at retryAfterMs it is allowed.
     const retryAt = MINUTE + 15_000 + denied.retryAfterMs!;
-    expect(limiter.consume('k', retryAt - 1).allowed).toBe(false);
-    expect(limiter.consume('k', retryAt).allowed).toBe(true);
+    expect(limiter.consume('k', { now: retryAt - 1 }).allowed).toBe(false);
+    expect(limiter.consume('k', { now: retryAt }).allowed).toBe(true);
   });
 
   it('softens the boundary burst: fixed window allows 6, counter 4, exact log 3', () => {
     const times = [997, 998, 999, 1000, 1001, 1002];
-    const count = (l: { consume(k: string, t: number): { allowed: boolean } }) =>
-      times.filter((t) => l.consume('a', t).allowed).length;
+    const count = (l: { consume(k: string, o: { now: number }): { allowed: boolean } }) =>
+      times.filter((t) => l.consume('a', { now: t }).allowed).length;
 
     expect(count(new FixedWindowLimiter({ limit: 3, windowMs: 1000 }))).toBe(6);
     // At t=1001 the previous window weighs 999/1000: 3 * 0.999 = 2.997 < 3, so one slips in.
@@ -48,14 +48,14 @@ describe('SlidingWindowCounterLimiter', () => {
       const counter = new SlidingWindowCounterLimiter({ limit: 10, windowMs: 1000 });
       const exact = new SlidingWindowLogLimiter({ limit: 10, windowMs: 1000 });
       for (const t of previousTimes) {
-        counter.consume('a', t);
-        exact.consume('a', t);
+        counter.consume('a', { now: t });
+        exact.consume('a', { now: t });
       }
       let counterAllowed = 0;
       let exactAllowed = 0;
       for (let i = 0; i < 20; i++) {
-        if (counter.consume('a', 1500).allowed) counterAllowed++;
-        if (exact.consume('a', 1500).allowed) exactAllowed++;
+        if (counter.consume('a', { now: 1500 }).allowed) counterAllowed++;
+        if (exact.consume('a', { now: 1500 }).allowed) exactAllowed++;
       }
       return { counterAllowed, exactAllowed };
     };
@@ -75,9 +75,9 @@ describe('SlidingWindowCounterLimiter', () => {
 
   it('forgets everything after two idle windows', () => {
     const limiter = new SlidingWindowCounterLimiter({ limit: 2, windowMs: 1000 });
-    limiter.consume('a', 0);
-    limiter.consume('a', 0);
-    expect(limiter.consume('a', 1).allowed).toBe(false);
-    expect(limiter.consume('a', 2000)).toMatchObject({ allowed: true, remaining: 1 });
+    limiter.consume('a', { now: 0 });
+    limiter.consume('a', { now: 0 });
+    expect(limiter.consume('a', { now: 1 }).allowed).toBe(false);
+    expect(limiter.consume('a', { now: 2000 })).toMatchObject({ allowed: true, remaining: 1 });
   });
 });

@@ -3,6 +3,8 @@ export type {
   RateLimiter,
   AsyncRateLimiter,
   AnyRateLimiter,
+  ConsumeOptions,
+  LocalConsumeOptions,
   FixedWindowConfig,
   SlidingWindowLogConfig,
   SlidingWindowCounterConfig,
@@ -16,3 +18,4 @@ export { SlidingWindowCounterLimiter } from './sliding-window-counter.js';
 export { TokenBucketLimiter, tokenBucketStep } from './token-bucket.js';
 export type { TokenBucketState } from './token-bucket.js';
 export { GcraLimiter } from './gcra.js';
+export { resolveCost } from './validate.js';

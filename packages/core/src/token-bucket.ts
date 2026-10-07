@@ -1,5 +1,5 @@
-import type { RateLimiter, RateLimitResult, TokenBucketConfig } from './types.js';
-import { assertPositive } from './validate.js';
+import type { LocalConsumeOptions, RateLimiter, RateLimitResult, TokenBucketConfig } from './types.js';
+import { assertPositive, resolveCost } from './validate.js';
 
 /**
  * Floating-point slack. Refill adds fractions like 0.1 + 0.2, which can land
@@ -17,7 +17,7 @@ export interface TokenBucketState {
 }
 
 /**
- * One token-bucket decision as a pure function: (old state, now) → (new state, result).
+ * One token-bucket decision as a pure function: (old state, now, cost) → (new state, result).
  *
  * It's separate from the class so that the in-memory limiter and the naive
  * Redis limiter run exactly the same math. The only difference between
@@ -28,6 +28,7 @@ export function tokenBucketStep(
   state: TokenBucketState | undefined,
   config: TokenBucketConfig,
   now: number,
+  cost = 1,
 ): { state: TokenBucketState; result: RateLimitResult } {
   const { capacity } = config;
   const refillPerMs = config.refillPerSecond / 1000;
@@ -40,8 +41,8 @@ export function tokenBucketStep(
   const elapsed = Math.max(0, now - previous.lastRefill);
   let tokens = Math.min(capacity, previous.tokens + elapsed * refillPerMs);
 
-  const allowed = tokens >= 1 - EPSILON;
-  if (allowed) tokens = Math.max(0, tokens - 1);
+  const allowed = tokens >= cost - EPSILON;
+  if (allowed) tokens = Math.max(0, tokens - cost);
 
   return {
     state: { tokens, lastRefill: now },
@@ -50,7 +51,8 @@ export function tokenBucketStep(
       limit: capacity,
       remaining: Math.floor(tokens + EPSILON),
       resetMs: Math.ceil((capacity - tokens) / refillPerMs),
-      ...(allowed ? {} : { retryAfterMs: Math.ceil((1 - tokens) / refillPerMs) }),
+      // A cost above capacity never fits, however long the client waits.
+      ...(allowed || cost > capacity ? {} : { retryAfterMs: Math.ceil((cost - tokens) / refillPerMs) }),
     },
   };
 }
@@ -62,7 +64,7 @@ export function tokenBucketStep(
  * local rate limit all use it.
  *
  * Core idea: each key has a bucket holding up to `capacity` tokens. Every
- * request takes one token, and tokens drip back in continuously at
+ * request takes one token (or `cost` tokens), and tokens drip back in continuously at
  * `refillPerSecond`. The bucket isn't refilled by a timer. On each request
  * we work out how many tokens would have dripped in since we last looked
  * (elapsed x rate), so the state is just two numbers: tokens and lastRefill.
@@ -83,8 +85,10 @@ export class TokenBucketLimiter implements RateLimiter {
     this.config = { ...config };
   }
 
-  consume(key: string, now: number = Date.now()): RateLimitResult {
-    const { state, result } = tokenBucketStep(this.buckets.get(key), this.config, now);
+  consume(key: string, options: LocalConsumeOptions = {}): RateLimitResult {
+    const now = options.now ?? Date.now();
+    const cost = resolveCost(options.cost);
+    const { state, result } = tokenBucketStep(this.buckets.get(key), this.config, now, cost);
     this.buckets.set(key, state);
     return result;
   }

@@ -12,8 +12,30 @@ export interface RateLimitResult {
   remaining: number;
   /** Milliseconds until this key is completely back to a fresh state. */
   resetMs: number;
-  /** Only set when denied: milliseconds until a retry can succeed. */
+  /**
+   * Only set when denied: milliseconds until a retry can succeed. A denial
+   * *without* it means waiting can never help: the request's cost is larger
+   * than the limit itself.
+   */
   retryAfterMs?: number;
+}
+
+/** Per-request options shared by every limiter. */
+export interface ConsumeOptions {
+  /**
+   * How many units this request uses. Default 1; must be a positive whole
+   * number. It lets one limiter meter work instead of requests: LLM tokens,
+   * rows exported, emails sent. A request of cost N is admitted only if N
+   * requests of cost 1 would all be admitted in a row, so each algorithm's
+   * guarantees carry over unchanged, just counted in units.
+   */
+  cost?: number;
+}
+
+/** In-memory limiters also accept the time, so tests can control the clock. */
+export interface LocalConsumeOptions extends ConsumeOptions {
+  /** Milliseconds since the epoch. Default Date.now(). */
+  now?: number;
 }
 
 /**
@@ -23,7 +45,7 @@ export interface RateLimitResult {
  * flaky timing). In production it defaults to Date.now().
  */
 export interface RateLimiter {
-  consume(key: string, now?: number): RateLimitResult;
+  consume(key: string, options?: LocalConsumeOptions): RateLimitResult;
 }
 
 /**
@@ -32,7 +54,7 @@ export interface RateLimiter {
  * because the clock belongs to the store (see DESIGN.md, "whose clock?").
  */
 export interface AsyncRateLimiter {
-  consume(key: string): Promise<RateLimitResult>;
+  consume(key: string, options?: ConsumeOptions): Promise<RateLimitResult>;
 }
 
 /** Anything the middleware can sit in front of. */

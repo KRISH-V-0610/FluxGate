@@ -1,5 +1,5 @@
-import type { RateLimiter, RateLimitResult, FixedWindowConfig } from './types.js';
-import { assertPositive } from './validate.js';
+import type { RateLimiter, RateLimitResult, FixedWindowConfig, LocalConsumeOptions } from './types.js';
+import { assertPositive, resolveCost } from './validate.js';
 
 /**
  * Fixed window counter.
@@ -28,7 +28,10 @@ export class FixedWindowLimiter implements RateLimiter {
     this.windowMs = config.windowMs;
   }
 
-  consume(key: string, now: number = Date.now()): RateLimitResult {
+  consume(key: string, options: LocalConsumeOptions = {}): RateLimitResult {
+    const now = options.now ?? Date.now();
+    const cost = resolveCost(options.cost);
+
     // 1. Which slice of time does `now` fall into?
     const windowIndex = Math.floor(now / this.windowMs);
 
@@ -39,20 +42,23 @@ export class FixedWindowLimiter implements RateLimiter {
       this.state.set(key, entry);
     }
 
-    // 4-5. Count this request, then check it against the limit.
-    entry.count++;
-    const allowed = entry.count <= this.limit;
+    // 4-5. Admit the request only if its whole cost fits in what's left of
+    // this slice. Only admitted requests count, so one oversized request
+    // can't use up the slice for everyone after it.
+    const allowed = entry.count + cost <= this.limit;
+    if (allowed) entry.count += cost;
 
     // 6. Time left until this slice ends and the counter starts again.
     const resetMs = (windowIndex + 1) * this.windowMs - now;
 
-    // 7. Report back. A denied client can retry exactly when the slice ends.
+    // 7. Report back. A denied client can retry exactly when the slice ends,
+    // unless the cost is bigger than a whole slice (then it never fits).
     return {
       allowed,
       limit: this.limit,
-      remaining: Math.max(0, this.limit - entry.count),
+      remaining: this.limit - entry.count,
       resetMs,
-      ...(allowed ? {} : { retryAfterMs: resetMs }),
+      ...(allowed || cost > this.limit ? {} : { retryAfterMs: resetMs }),
     };
   }
 }

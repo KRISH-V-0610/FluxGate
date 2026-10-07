@@ -15,15 +15,15 @@ function mulberry32(seed: number) {
 describe('GcraLimiter', () => {
   it('allows `burst` back-to-back requests, then one per interval', () => {
     const limiter = new GcraLimiter({ burst: 3, ratePerSecond: 10 }); // interval = 100 ms
-    expect(limiter.consume('a', 0)).toMatchObject({ allowed: true, remaining: 2 });
-    expect(limiter.consume('a', 0)).toMatchObject({ allowed: true, remaining: 1 });
-    expect(limiter.consume('a', 0)).toMatchObject({ allowed: true, remaining: 0 });
+    expect(limiter.consume('a', { now: 0 })).toMatchObject({ allowed: true, remaining: 2 });
+    expect(limiter.consume('a', { now: 0 })).toMatchObject({ allowed: true, remaining: 1 });
+    expect(limiter.consume('a', { now: 0 })).toMatchObject({ allowed: true, remaining: 0 });
 
-    const denied = limiter.consume('a', 0);
+    const denied = limiter.consume('a', { now: 0 });
     expect(denied).toMatchObject({ allowed: false, retryAfterMs: 100, resetMs: 300 });
 
-    expect(limiter.consume('a', 99).allowed).toBe(false);
-    expect(limiter.consume('a', 100).allowed).toBe(true);
+    expect(limiter.consume('a', { now: 99 }).allowed).toBe(false);
+    expect(limiter.consume('a', { now: 100 }).allowed).toBe(true);
   });
 
   it.each([
@@ -43,8 +43,8 @@ describe('GcraLimiter', () => {
       for (let i = 0; i < 20_000; i++) {
         // Mix of tight bursts (0 ms gaps) and pauses, in whole milliseconds.
         t += random() < 0.3 ? 0 : Math.floor(random() * (2000 / ratePerSecond));
-        const a = gcra.consume('k', t).allowed;
-        const b = bucket.consume('k', t).allowed;
+        const a = gcra.consume('k', { now: t }).allowed;
+        const b = bucket.consume('k', { now: t }).allowed;
         expect(a, `request #${i} at t=${t}`).toBe(b);
         if (a) allowedCount++;
       }

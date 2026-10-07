@@ -1,5 +1,5 @@
-import type { GcraConfig, RateLimiter, RateLimitResult } from './types.js';
-import { assertPositive } from './validate.js';
+import type { GcraConfig, LocalConsumeOptions, RateLimiter, RateLimitResult } from './types.js';
+import { assertPositive, resolveCost } from './validate.js';
 
 /** Floating-point slack, for the same reason as in token-bucket.ts (intervals like 1000/3 ms). */
 const EPSILON = 1e-6;
@@ -41,9 +41,12 @@ export class GcraLimiter implements RateLimiter {
     this.interval = 1000 / config.ratePerSecond;
   }
 
-  consume(key: string, now: number = Date.now()): RateLimitResult {
+  consume(key: string, options: LocalConsumeOptions = {}): RateLimitResult {
+    const now = options.now ?? Date.now();
+    const cost = resolveCost(options.cost);
     const tat = Math.max(this.tats.get(key) ?? now, now);
-    const newTat = tat + this.interval;
+    // A request of cost N books N intervals of the schedule at once.
+    const newTat = tat + this.interval * cost;
     const tolerance = this.burst * this.interval;
 
     // Earliest moment this request would fit: when newTat - now == tolerance.
@@ -63,9 +66,10 @@ export class GcraLimiter implements RateLimiter {
     return {
       allowed: false,
       limit: this.burst,
-      remaining: 0,
+      remaining: Math.max(0, Math.floor((tolerance - (tat - now)) / this.interval + EPSILON)),
       resetMs: Math.ceil(tat - now),
-      retryAfterMs: Math.ceil(allowAt - now),
+      // A cost above the burst never fits, however long the client waits.
+      ...(cost > this.burst ? {} : { retryAfterMs: Math.ceil(allowAt - now) }),
     };
   }
 }

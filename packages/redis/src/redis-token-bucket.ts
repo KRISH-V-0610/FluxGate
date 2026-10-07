@@ -1,7 +1,7 @@
 import type { Redis } from 'ioredis';
-import type { AsyncRateLimiter, RateLimitResult } from '@fluxgate/core';
+import { resolveCost, type AsyncRateLimiter, type ConsumeOptions, type RateLimitResult } from '@fluxgate/core';
 import type { RedisLimiterConfig } from './naive-token-bucket.js';
-import { takeTokens } from './token-bucket-script.js';
+import { denial, takeTokens } from './token-bucket-script.js';
 
 /**
  * ✅ The fix: an atomic, distributed token bucket.
@@ -26,16 +26,12 @@ export class RedisTokenBucket implements AsyncRateLimiter {
     this.prefix = config.prefix ?? 'fluxgate:tb:';
   }
 
-  async consume(key: string): Promise<RateLimitResult> {
+  async consume(key: string, options: ConsumeOptions = {}): Promise<RateLimitResult> {
+    const cost = resolveCost(options.cost);
     this.calls++;
-    const r = await takeTokens(this.redis, this.prefix + key, this.config, 1);
-    const allowed = r.granted === 1;
-    return {
-      allowed,
-      limit: this.config.capacity,
-      remaining: r.remaining,
-      resetMs: r.resetMs,
-      ...(allowed ? {} : { retryAfterMs: r.retryAfterMs }),
-    };
+    // want = need = cost: all of it or nothing, like core's token bucket.
+    const r = await takeTokens(this.redis, this.prefix + key, this.config, { want: cost, need: cost });
+    if (r.granted === 0) return denial(this.config.capacity, cost, r);
+    return { allowed: true, limit: this.config.capacity, remaining: r.remaining, resetMs: r.resetMs };
   }
 }
