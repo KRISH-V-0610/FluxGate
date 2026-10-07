@@ -102,6 +102,19 @@ const sections: Record<string, () => string | undefined> = {
     ].join('\n');
   },
 
+  service() {
+    const r = load('service');
+    if (!r) return;
+    return [
+      table(
+        ['mode', 'store', 'in flight', 'p50 (ms)', 'p99 (ms)', 'throughput (decisions/s)', 'Redis calls / decision'],
+        r.rows.map((x: Json) => [x.mode, x.store, x.inFlight, x.p50, x.p99, x.throughputPerSec.toLocaleString('en-US'), x.redisCallsPerRequest]),
+      ),
+      '',
+      `<sub>${r.setup.note}. "service" = \`@fluxgate/client\` → HTTP → the FluxGate server as a separate process (lease size ${r.setup.leaseSize} for redis-leased). One hot key, nothing denied. Source: \`results/service.json\`.</sub>`,
+    ].join('\n');
+  },
+
   leasing() {
     const r = load('leasing');
     if (!r) return;

@@ -1,0 +1,205 @@
+{
+  "generatedAt": "2026-10-07T09:16:23.027Z",
+  "setup": {
+    "note": "latency per decision in ms; client, service and Redis 7.4 (Docker Desktop) on one Windows 11 machine, Node v22.17.0",
+    "requests": {
+      "1": 3000,
+      "64": 20000
+    },
+    "leaseSize": 20
+  },
+  "rows": [
+    {
+      "mode": "in-process consume()",
+      "store": "memory",
+      "inFlight": 1,
+      "samples": 3000,
+      "p50": 0.001,
+      "p90": 0.002,
+      "p99": 0.017,
+      "max": 0.122,
+      "throughputPerSec": 242281,
+      "redisCallsPerRequest": 0
+    },
+    {
+      "mode": "in-process consume()",
+      "store": "memory",
+      "inFlight": 64,
+      "samples": 20000,
+      "p50": 0.072,
+      "p90": 0.106,
+      "p99": 0.319,
+      "max": 1.316,
+      "throughputPerSec": 428019,
+      "redisCallsPerRequest": 0
+    },
+    {
+      "mode": "in-process check() + metrics",
+      "store": "memory",
+      "inFlight": 1,
+      "samples": 3000,
+      "p50": 0.001,
+      "p90": 0.002,
+      "p99": 0.002,
+      "max": 0.079,
+      "throughputPerSec": 399675,
+      "redisCallsPerRequest": 0
+    },
+    {
+      "mode": "in-process check() + metrics",
+      "store": "memory",
+      "inFlight": 64,
+      "samples": 20000,
+      "p50": 0.055,
+      "p90": 0.084,
+      "p99": 0.674,
+      "max": 4.015,
+      "throughputPerSec": 501901,
+      "redisCallsPerRequest": 0
+    },
+    {
+      "mode": "in-process consume()",
+      "store": "redis-lua",
+      "inFlight": 1,
+      "samples": 3000,
+      "p50": 1.117,
+      "p90": 2.076,
+      "p99": 3.158,
+      "max": 12.1,
+      "throughputPerSec": 761,
+      "redisCallsPerRequest": 1
+    },
+    {
+      "mode": "in-process consume()",
+      "store": "redis-lua",
+      "inFlight": 64,
+      "samples": 20000,
+      "p50": 7.892,
+      "p90": 10.952,
+      "p99": 15.386,
+      "max": 29.95,
+      "throughputPerSec": 7669,
+      "redisCallsPerRequest": 1
+    },
+    {
+      "mode": "in-process check() + metrics",
+      "store": "redis-lua",
+      "inFlight": 1,
+      "samples": 3000,
+      "p50": 0.972,
+      "p90": 1.689,
+      "p99": 3.427,
+      "max": 22.467,
+      "throughputPerSec": 865,
+      "redisCallsPerRequest": 1
+    },
+    {
+      "mode": "in-process check() + metrics",
+      "store": "redis-lua",
+      "inFlight": 64,
+      "samples": 20000,
+      "p50": 7.318,
+      "p90": 10.228,
+      "p99": 14.782,
+      "max": 18.332,
+      "throughputPerSec": 8177,
+      "redisCallsPerRequest": 1
+    },
+    {
+      "mode": "HTTP hop only (bare node:http)",
+      "store": "-",
+      "inFlight": 1,
+      "samples": 3000,
+      "p50": 0.884,
+      "p90": 1.354,
+      "p99": 4.116,
+      "max": 11.397,
+      "throughputPerSec": 985,
+      "redisCallsPerRequest": 0
+    },
+    {
+      "mode": "HTTP hop only (bare node:http)",
+      "store": "-",
+      "inFlight": 64,
+      "samples": 20000,
+      "p50": 42.839,
+      "p90": 68.327,
+      "p99": 136.207,
+      "max": 170.458,
+      "throughputPerSec": 1343,
+      "redisCallsPerRequest": 0
+    },
+    {
+      "mode": "service (HTTP)",
+      "store": "memory",
+      "inFlight": 1,
+      "samples": 3000,
+      "p50": 1.323,
+      "p90": 2.12,
+      "p99": 4.551,
+      "max": 10.343,
+      "throughputPerSec": 661,
+      "redisCallsPerRequest": 0
+    },
+    {
+      "mode": "service (HTTP)",
+      "store": "memory",
+      "inFlight": 64,
+      "samples": 20000,
+      "p50": 44.926,
+      "p90": 65.208,
+      "p99": 101.358,
+      "max": 166.432,
+      "throughputPerSec": 1322,
+      "redisCallsPerRequest": 0
+    },
+    {
+      "mode": "service (HTTP)",
+      "store": "redis-lua",
+      "inFlight": 1,
+      "samples": 3000,
+      "p50": 3.016,
+      "p90": 5.534,
+      "p99": 10.996,
+      "max": 27.03,
+      "throughputPerSec": 285,
+      "redisCallsPerRequest": 1
+    },
+    {
+      "mode": "service (HTTP)",
+      "store": "redis-lua",
+      "inFlight": 64,
+      "samples": 20000,
+      "p50": 75.344,
+      "p90": 99.593,
+      "p99": 161.719,
+      "max": 234.097,
+      "throughputPerSec": 809,
+      "redisCallsPerRequest": 1
+    },
+    {
+      "mode": "service (HTTP)",
+      "store": "redis-leased",
+      "inFlight": 1,
+      "samples": 3000,
+      "p50": 1.117,
+      "p90": 2.257,
+      "p99": 5.337,
+      "max": 23.473,
+      "throughputPerSec": 690,
+      "redisCallsPerRequest": 0.05
+    },
+    {
+      "mode": "service (HTTP)",
+      "store": "redis-leased",
+      "inFlight": 64,
+      "samples": 20000,
+      "p50": 46.404,
+      "p90": 66.685,
+      "p99": 90.56,
+      "max": 178.938,
+      "throughputPerSec": 1276,
+      "redisCallsPerRequest": 0.05
+    }
+  ]
+}
