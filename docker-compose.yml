@@ -8,6 +8,9 @@
 #   STORE=memory docker compose up -d      (each instance counts alone: 3x the limit)
 #   STORE=redis-naive docker compose up -d (shared but racy)
 #   docker compose up -d                   (default: redis-lua, shared and atomic)
+#
+# With dashboards (Grafana on http://localhost:3001, Prometheus on :9090):
+#   docker compose --profile observability up -d
 
 x-app: &app
   build:
@@ -19,6 +22,8 @@ x-app: &app
     REDIS_URL: redis://redis:6379
     TRUST_PROXY: "1"
     LEASE_SIZE: ${LEASE_SIZE:-5}
+    # Protects POST /v1/check. Empty means open (a warning is logged): set it outside local demos.
+    SERVICE_TOKEN: ${SERVICE_TOKEN:-}
   depends_on:
     redis:
       condition: service_healthy
@@ -64,6 +69,38 @@ services:
       - app1
       - app2
       - app3
+
+  # Observability, only on demand: docker compose --profile observability up -d
+  prometheus:
+    image: prom/prometheus:v3.13.2
+    profiles: ["observability"]
+    volumes:
+      - ./docker/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
+    depends_on:
+      - app1
+      - app2
+      - app3
+
+  grafana:
+    image: grafana/grafana:13.1.1
+    profiles: ["observability"]
+    environment:
+      # Read-only access without logging in, straight to the FluxGate dashboard.
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /var/lib/grafana/dashboards/fluxgate.json
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_ANALYTICS_CHECK_FOR_UPDATES: "false"
+      GF_NEWS_NEWS_FEED_ENABLED: "false"
+    volumes:
+      - ./docker/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./docker/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    ports:
+      - "3001:3000"
+    depends_on:
+      - prometheus
 
   # Load test, only on demand:  docker compose --profile bench run --rm k6
   k6:

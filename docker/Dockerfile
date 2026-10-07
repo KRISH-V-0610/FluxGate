@@ -7,6 +7,8 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 COPY packages/core/package.json packages/core/
 COPY packages/redis/package.json packages/redis/
+COPY packages/http/package.json packages/http/
+COPY packages/client/package.json packages/client/
 COPY packages/server/package.json packages/server/
 COPY packages/bench/package.json packages/bench/
 RUN npm ci --ignore-scripts

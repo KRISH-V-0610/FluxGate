@@ -1,0 +1,16 @@
+# Prometheus scrapes each app instance directly (not through Nginx, which
+# would land on a random instance each time and blocks /metrics anyway).
+global:
+  scrape_interval: 5s
+  evaluation_interval: 5s
+
+scrape_configs:
+  - job_name: fluxgate
+    static_configs:
+      - targets: ["app1:3000", "app2:3000", "app3:3000"]
+    relabel_configs:
+      # instance="app1" instead of "app1:3000", for shorter legends.
+      - source_labels: [__address__]
+        regex: "([^:]+):[0-9]+"
+        target_label: instance
+        replacement: "$1"
