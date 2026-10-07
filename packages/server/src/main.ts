@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { createRedisClient } from '@fluxgate/redis';
 import { byTier, Metrics, type FailMode } from '@fluxgate/http';
 import { createApp } from './app.js';

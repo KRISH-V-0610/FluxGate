@@ -2,8 +2,23 @@
   "name": "@fluxgate/redis",
   "version": "1.0.0",
   "description": "Redis-backed distributed limiters: a deliberately racy naive version, an atomic Lua token bucket, and a token-leasing variant.",
+  "keywords": [
+    "rate-limiter",
+    "rate-limiting",
+    "redis",
+    "distributed",
+    "token-bucket",
+    "lua"
+  ],
   "license": "MIT",
   "author": "Krish Vaghasia",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KRISH-V-0610/FluxGate.git",
+    "directory": "packages/redis"
+  },
+  "homepage": "https://github.com/KRISH-V-0610/FluxGate#readme",
+  "bugs": "https://github.com/KRISH-V-0610/FluxGate/issues",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -19,10 +34,14 @@
     "!dist/**/*.test.*"
   ],
   "scripts": {
-    "build": "tsc -b"
+    "build": "tsc -b",
+    "prepublishOnly": "tsc -b"
   },
   "dependencies": {
     "@fluxgate/core": "1.0.0",
     "ioredis": "^6.0.0"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }

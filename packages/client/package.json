@@ -2,9 +2,22 @@
   "name": "@fluxgate/client",
   "version": "1.0.0",
   "description": "Client for the FluxGate rate-limit service: one HTTP call per decision, from any app or edge runtime. Plugs into every @fluxgate/http adapter. No runtime dependencies besides @fluxgate/core types.",
-  "keywords": ["rate-limiter", "rate-limiting", "client", "edge", "service"],
+  "keywords": [
+    "rate-limiter",
+    "rate-limiting",
+    "client",
+    "edge",
+    "service"
+  ],
   "license": "MIT",
   "author": "Krish Vaghasia",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KRISH-V-0610/FluxGate.git",
+    "directory": "packages/client"
+  },
+  "homepage": "https://github.com/KRISH-V-0610/FluxGate#readme",
+  "bugs": "https://github.com/KRISH-V-0610/FluxGate/issues",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -14,7 +27,10 @@
       "default": "./dist/index.js"
     }
   },
-  "files": ["dist", "!dist/**/*.test.*"],
+  "files": [
+    "dist",
+    "!dist/**/*.test.*"
+  ],
   "sideEffects": false,
   "scripts": {
     "build": "tsc -b",
@@ -22,5 +38,8 @@
   },
   "dependencies": {
     "@fluxgate/core": "1.0.0"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }

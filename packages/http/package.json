@@ -14,6 +14,13 @@
   ],
   "license": "MIT",
   "author": "Krish Vaghasia",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KRISH-V-0610/FluxGate.git",
+    "directory": "packages/http"
+  },
+  "homepage": "https://github.com/KRISH-V-0610/FluxGate#readme",
+  "bugs": "https://github.com/KRISH-V-0610/FluxGate/issues",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -72,5 +79,8 @@
     "express": "^5.2.1",
     "fastify": "^5.12.5",
     "hono": "^4.13.13"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }

@@ -2,20 +2,42 @@
   "name": "@fluxgate/server",
   "version": "1.0.0",
   "description": "The deployable FluxGate server: a demo API, the rate-limit service (POST /v1/check) and Prometheus /metrics, configured from environment variables.",
+  "keywords": [
+    "rate-limiter",
+    "rate-limiting",
+    "service",
+    "prometheus",
+    "express"
+  ],
   "license": "MIT",
   "author": "Krish Vaghasia",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KRISH-V-0610/FluxGate.git",
+    "directory": "packages/server"
+  },
+  "homepage": "https://github.com/KRISH-V-0610/FluxGate#readme",
+  "bugs": "https://github.com/KRISH-V-0610/FluxGate/issues",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "bin": {
+    "fluxgate-server": "./dist/main.js"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     }
   },
+  "files": [
+    "dist",
+    "!dist/**/*.test.*"
+  ],
   "scripts": {
     "build": "tsc -b",
-    "start": "node dist/main.js"
+    "start": "node dist/main.js",
+    "prepublishOnly": "tsc -b"
   },
   "dependencies": {
     "@fluxgate/core": "1.0.0",
@@ -26,5 +48,8 @@
   "devDependencies": {
     "@fluxgate/client": "1.0.0",
     "@types/express": "^5.0.6"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }
