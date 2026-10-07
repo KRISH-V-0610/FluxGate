@@ -1,7 +1,7 @@
 {
   "name": "@fluxgate/server",
   "version": "1.0.0",
-  "description": "Express middleware (headers, tiers, fail-open/closed) and the demo API that runs behind Nginx.",
+  "description": "The deployable FluxGate server: a demo API, the rate-limit service (POST /v1/check) and Prometheus /metrics, configured from environment variables.",
   "license": "MIT",
   "author": "Krish Vaghasia",
   "type": "module",
@@ -19,10 +19,12 @@
   },
   "dependencies": {
     "@fluxgate/core": "1.0.0",
+    "@fluxgate/http": "1.0.0",
     "@fluxgate/redis": "1.0.0",
     "express": "^5.2.1"
   },
   "devDependencies": {
+    "@fluxgate/client": "1.0.0",
     "@types/express": "^5.0.6"
   }
 }

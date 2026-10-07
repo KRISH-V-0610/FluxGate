@@ -1,8 +1,10 @@
 import express, { type Express } from 'express';
-import { fluxgate, type FluxgateOptions } from './middleware.js';
+import type { Metrics } from '@fluxgate/http';
+import { fluxgate, type ExpressOptions } from '@fluxgate/http/express';
+import { createServiceRouter, type ServiceOptions } from './service.js';
 import { demoTierOf } from './tiers.js';
 
-export interface AppOptions extends FluxgateOptions {
+export interface AppOptions extends ExpressOptions {
   /** Shown in every response so you can watch Nginx rotate across instances. */
   instanceId?: string;
   /**
@@ -12,6 +14,10 @@ export interface AppOptions extends FluxgateOptions {
    * because otherwise clients can forge that header to dodge the limit.
    */
   trustProxy?: boolean | number;
+  /** Serve GET /metrics for Prometheus, and record every decision in it. */
+  metrics?: Metrics;
+  /** Serve POST /v1/check so other apps can use these policies (see @fluxgate/client). */
+  service?: Omit<ServiceOptions, 'metrics'>;
 }
 
 export function createApp(options: AppOptions): Express {
@@ -31,7 +37,20 @@ export function createApp(options: AppOptions): Express {
     res.json({ status: 'ok', instance });
   });
 
-  app.use('/api', fluxgate(options));
+  // Not rate limited either: Prometheus scrapes it every few seconds.
+  // Nginx blocks it from the outside (docker/nginx.conf).
+  const metrics = options.metrics;
+  if (metrics) {
+    app.get('/metrics', (_req, res) => {
+      // end(), not send(): send() rewrites the Content-Type parameters.
+      res.setHeader('Content-Type', metrics.contentType);
+      res.end(metrics.render());
+    });
+  }
+
+  if (options.service) app.use(createServiceRouter({ ...options.service, metrics }));
+
+  app.use('/api', fluxgate({ name: 'api', ...options }));
 
   app.get('/api/hello', (req, res) => {
     const key = req.get('x-api-key');

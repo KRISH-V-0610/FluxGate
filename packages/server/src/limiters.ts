@@ -46,3 +46,8 @@ export function buildLimiter(o: BuildOptions): AnyRateLimiter {
       });
   }
 }
+
+/** Commands this limiter has sent to Redis so far (0 for the in-memory store). */
+export function redisCalls(limiter: AnyRateLimiter): number {
+  return 'calls' in limiter && typeof limiter.calls === 'number' ? limiter.calls : 0;
+}
