@@ -104,4 +104,15 @@ describe.skipIf(redis === undefined)('Redis limiters (integration)', () => {
     // B is denied, even though only 1 of 10 tokens was actually used.
     expect((await b.consume('user')).allowed).toBe(false);
   });
+
+  it('leasing caches a denial until retry-after, so an empty bucket costs no Redis calls', async () => {
+    const leased = new LeasedTokenBucket(r, { ...config, prefix: `${ns}deny:`, leaseSize: 10, leaseTtlMs: 10_000 });
+    await burst(leased, 'user', 10); // drain the bucket
+    const denied = await leased.consume('user');
+    expect(denied.allowed).toBe(false);
+    expect(denied.retryAfterMs).toBeGreaterThan(0);
+    const callsAfterFirstDenial = leased.calls;
+    for (let i = 0; i < 50; i++) expect((await leased.consume('user')).allowed).toBe(false);
+    expect(leased.calls).toBe(callsAfterFirstDenial);
+  });
 });

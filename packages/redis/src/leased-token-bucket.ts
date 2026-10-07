@@ -39,7 +39,10 @@ interface Lease {
  *    (instances × leaseSize). `leaseTtlMs` limits how long that can happen.
  *  - LOST TOKENS: an expired lease's leftovers are discarded, never returned.
  *
- * Redis calls drop to roughly 1/leaseSize per request. Throughput and tail
+ * Under the limit, Redis calls drop to roughly 1/leaseSize per request. At
+ * saturation the bucket refills one token at a time, so batches can't form;
+ * there, a short local "denied until retry-after" cache saves the calls
+ * instead. Throughput and tail
  * latency improve in exchange for a little precision, which is the classic
  * distributed-systems tradeoff of coordination vs accuracy.
  */
@@ -48,6 +51,11 @@ export class LeasedTokenBucket implements AsyncRateLimiter {
   calls = 0;
   private prefix: string;
   private leases = new Map<string, Lease>();
+  /**
+   * Negative cache: after Redis says "empty, retry in X ms", deny locally
+   * until then. Safe: the shared bucket cannot refill sooner than that.
+   */
+  private deniedUntil = new Map<string, { until: number; resetAt: number }>();
   /** In-flight lease requests, so 100 concurrent requests trigger 1 Redis call, not 100. */
   private inflight = new Map<string, Promise<TakeResult>>();
 
@@ -70,6 +78,21 @@ export class LeasedTokenBucket implements AsyncRateLimiter {
           remaining: lease.globalRemaining + lease.tokens,
           resetMs: Math.max(0, lease.resetAt - Date.now()),
         };
+      }
+
+      const denied = this.deniedUntil.get(key);
+      if (denied !== undefined) {
+        const now = Date.now();
+        if (now < denied.until) {
+          return {
+            allowed: false,
+            limit: this.config.capacity,
+            remaining: 0,
+            resetMs: Math.max(0, denied.resetAt - now),
+            retryAfterMs: denied.until - now,
+          };
+        }
+        this.deniedUntil.delete(key);
       }
 
       // Slow path: borrow a new batch. If one is already being fetched for
@@ -98,7 +121,9 @@ export class LeasedTokenBucket implements AsyncRateLimiter {
   private async borrow(key: string): Promise<TakeResult> {
     this.calls++;
     const taken = await takeTokens(this.redis, this.prefix + key, this.config, this.config.leaseSize);
-    if (taken.granted > 0) {
+    if (taken.granted === 0) {
+      this.deniedUntil.set(key, { until: Date.now() + taken.retryAfterMs, resetAt: Date.now() + taken.resetMs });
+    } else {
       this.leases.set(key, {
         tokens: taken.granted,
         expiresAt: Date.now() + this.config.leaseTtlMs,
