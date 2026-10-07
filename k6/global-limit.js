@@ -8,6 +8,7 @@
 //
 //   docker compose --profile bench run --rm k6
 //   STORE=memory docker compose up -d && STORE=memory docker compose --profile bench run --rm k6
+//   docker compose --profile bench run --rm -e RATE=2000 -e SECONDS=5 -e RUN_LABEL=redis-lua-2000rps k6
 
 import http from 'k6/http';
 import { Counter } from 'k6/metrics';

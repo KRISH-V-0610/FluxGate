@@ -29,7 +29,7 @@ function chart(opts: { title: string; x: (string | number)[]; yLabel: string; yM
     '```mermaid',
     'xychart-beta',
     `  title "${opts.title}"`,
-    `  x-axis [${opts.x.map((x) => (typeof x === 'number' ? x : `"${x}"`)).join(', ')}]`,
+    `  x-axis [${opts.x.map((x) => `"${x}"`).join(', ')}]`,
     `  y-axis "${opts.yLabel}" 0 --> ${opts.yMax}`,
     ...(opts.bar ? [`  bar ${fmt(opts.bar)}`] : []),
     ...(opts.lines ?? []).map((l) => `  line ${fmt(l)}`),
