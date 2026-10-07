@@ -1,0 +1,10 @@
+{
+  // Solution file: `tsc -b` builds the packages in dependency order.
+  "files": [],
+  "references": [
+    { "path": "packages/core" },
+    { "path": "packages/redis" },
+    { "path": "packages/server" },
+    { "path": "packages/bench" }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "name": "fluxgate",
+  "version": "1.0.0",
+  "description": "A distributed rate limiter built from scratch: five algorithms, atomic Redis Lua, token leasing, and a measured evaluation.",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "author": "Krish Vaghasia",
+  "workspaces": [
+    "packages/core",
+    "packages/redis",
+    "packages/server",
+    "packages/bench"
+  ],
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "tsc -b --clean",
+    "typecheck": "tsc -b && tsc -p tsconfig.test.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "start": "node packages/server/dist/main.js",
+    "bench": "npm run build && node packages/bench/dist/accuracy.js && node packages/bench/dist/race.js && node packages/bench/dist/latency.js && node packages/bench/dist/leasing.js && node packages/bench/dist/failover.js",
+    "report": "node packages/bench/dist/report.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  // Shared compiler options for every package. Each package's tsconfig.json
+  // "extends" this file and only adds its own rootDir/outDir/references.
+  "compilerOptions": {
+    "module": "nodenext",
+    "target": "es2022",
+    "types": ["node"],
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+    "composite": true,
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "noUncheckedSideEffectImports": true,
+    "moduleDetection": "force",
+    "skipLibCheck": true
+  }
+}
