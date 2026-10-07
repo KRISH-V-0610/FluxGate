@@ -9,6 +9,8 @@
   "workspaces": [
     "packages/core",
     "packages/redis",
+    "packages/http",
+    "packages/client",
     "packages/server",
     "packages/bench"
   ],
